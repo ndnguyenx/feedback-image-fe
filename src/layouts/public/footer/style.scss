@@ -1,0 +1,17 @@
+.footer-container {
+  background-color: var(--color-white);
+  padding: 2rem 0;
+  
+  .container-content {
+    margin: auto;
+    .copyright {
+      text-align: center;
+
+      span {
+        text-align: center;
+        line-height: 1;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}

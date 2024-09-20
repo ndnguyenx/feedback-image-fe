@@ -1,0 +1,9 @@
+.section-logo{
+    padding-top: 2rem;
+    display: flex;
+    justify-content: center;
+    &-item{
+        width: 15.875rem;
+        height: 11.5rem;
+    }
+}

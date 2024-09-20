@@ -1,0 +1,33 @@
+.layout-main {
+  display: flex;
+  width: 100%; 
+
+  .main-navbar {
+    flex-grow: 1; 
+    min-width: 0; 
+    background-color: var(--color-background-admin-page);
+    transition: margin-left 0.3s ease; 
+
+    .content {
+      margin-top: 120px; 
+      transition: margin-left 0.3s ease; 
+    }
+  }
+}
+
+/* Khi sidebar bị thu lại */
+.sidebar-container.collapsed ~ .main-navbar {
+  margin-left: 5rem; /* Khoảng cách khi sidebar bị thu lại */
+}
+
+.sidebar-container.expanded ~ .main-navbar {
+  margin-left: 15rem; /* Khoảng cách khi sidebar mở ra */
+}
+
+@media (max-width: 768px) {
+  .layout-main {
+    .main-navbar {
+      margin-left: 100px;
+    }
+  }
+}

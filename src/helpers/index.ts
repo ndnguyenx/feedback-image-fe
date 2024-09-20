@@ -1,1 +1,1 @@
-export * as HelperApi from './api.helper';
+export * from "./api.helper"

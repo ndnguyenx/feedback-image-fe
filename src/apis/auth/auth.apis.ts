@@ -4,8 +4,14 @@ import { cookies } from 'next/headers';
 import { IAuthLogin, IResponseLogin } from '@/interfaces/ICommon.interface';
 import { IBaseResponse } from '@/interfaces/IBaseResponse.interfaces';
 import { CONST_VALUES } from '@/constants/values.constant';
+import { IUser } from '@/interfaces/models';
+import { revalidateTag } from 'next/cache';
 
 const USER = 'USER';
+const TAG_NAME = {
+  USER: 'USER',
+  USERS: 'USERS',
+};
 
 export async function login(payload: IAuthLogin) {
   const result = await api<IBaseResponse<IResponseLogin>>({
@@ -26,29 +32,29 @@ export async function login(payload: IAuthLogin) {
   return result;
 }
 
-// export async function getMe() {
-//   const result = await api<IBaseResponse<IUser>>({
-//     url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.AUTH}/${CONST_APIS.FEATURES.AUTH.GET_ME}`,
-//     options: {
-//       method: BoEnumsCommon.EMethodApi.GET,
-//       next: {
-//         tags: [USER],
-//       },
-//     },
-//   });
-//   return result;
-// }
+export async function getMe() {
+  const result = await api<IBaseResponse<IUser>>({
+      url: `http://localhost:3006/api/v1/auth/get-me`,
+      options: {
+          method: 'GET',
+          next: {
+              tags: [TAG_NAME.USER],
+          },
+      },
+  });
+  return result;
+}
 
-// export async function logout() {
-//   const result = await api<IBaseResponse<IUser>>({
-//     url: `${CONST_APIS.VERSION_V1}/${CONST_APIS.FEATURES.COMMON.AUTH}/${CONST_APIS.FEATURES.AUTH.LOGOUT}`,
-//     options: {
-//       method: BoEnumsCommon.EMethodApi.POST,
-//     },
-//   });
+export async function logout() {
+  const result = await api<IBaseResponse<IUser>>({
+    url: `http://localhost:3006/api/v1/auth/logout`,
+    options: {
+      method: 'POST',
+    },
+  });
 
-//   cookies().delete(CONST_VALUES.TOKEN);
-//   revalidateTag(USER);
+  cookies().delete(CONST_VALUES.TOKEN);
+  revalidateTag(USER);
 
-//   return result;
-// }
+  return result;
+}

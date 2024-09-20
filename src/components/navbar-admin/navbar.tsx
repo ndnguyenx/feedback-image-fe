@@ -2,47 +2,44 @@
 
 import "./navbar.scss";
 import React, { useState } from "react";
-import Link from "next/link";
 import { Avatar, Divider, Dropdown } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import { FaUser } from "react-icons/fa";
-import { IoSettingsSharp } from "react-icons/io5";
 import { AiOutlineBars } from "react-icons/ai";
 import { IoIosLogOut } from "react-icons/io";
 import type { MenuProps } from "antd";
+import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { logout } from "@/apis/auth/auth.apis";
 
-const items: MenuProps["items"] = [
-  {
-    key: "1",
-    label: <Link href="/">Thông tin cá nhân</Link>,
-    icon: <FaUser />,
-  },
-  {
-    key: "2",
-    label: <Link href="/">Cài đặt</Link>,
-    icon: <IoSettingsSharp />,
-  },
-  {
-    key: "3",
-    label: <Link href="/">Hoạt động đăng nhập</Link>,
-    icon: <AiOutlineBars />,
-  },
-  {
-    type: "divider",
-  },
-  {
-    key: "4",
-    label: <Link href="/">Đăng xuất</Link>,
-    icon: <IoIosLogOut />,
-  },
-];
 
 export default function Navbar() {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const handlerLogout = async () => {
+    const results = await logout();
+    if (results.error) {
+      toast.error(results.message);
+    } else {
+      toast.success(results.message);
+      router.replace('/login', { scroll: true });
+    }
+  };
+
+  const items: MenuProps["items"] = [
+    {
+      key: "1",
+      label: <span onClick={handlerLogout}>Đăng xuất</span>,
+      icon: <IoIosLogOut />,
+    },
+    {
+      type: "divider",
+    },
+  ];
 
   return (
     <nav className="navbar">

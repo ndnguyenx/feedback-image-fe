@@ -8,8 +8,9 @@ import logo from "@/assets/images/logo-login.png";
 import { validateName, validatePassword } from "@/utils/validation.util";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import toast from "react-hot-toast";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { login } from "@/apis/auth/auth.apis";
+import { FaSpinner } from "react-icons/fa";
 
 interface FormValues {
   account: string;
@@ -17,7 +18,7 @@ interface FormValues {
 }
 
 export default function LoginAdminLayout() {
-  // const router = useRouter();
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -36,6 +37,8 @@ export default function LoginAdminLayout() {
         toast.error(results.message);
       } else {
         toast.success(results.message);
+        router.replace('/admin');
+        reset();
       }
     });
   };
@@ -95,8 +98,12 @@ export default function LoginAdminLayout() {
             </div>
             <small className="error">{errors.password?.message}</small>
 
-            <button className="submit-btn" type="submit">
-              Đăng nhập
+            <button className="submit-btn" type="submit" disabled={isPending}>
+              {isPending ? (
+                <FaSpinner className="spinner" />
+              ) : (
+                'Đăng nhập'
+              )}
             </button>
           </div>
         </form>

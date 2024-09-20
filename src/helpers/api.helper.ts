@@ -31,9 +31,9 @@ export const api = async <TypeResult>({
     credentials: 'include',
   };
 
-  let response = await fetch(url, dataOptions);
+  const response = await fetch(url, dataOptions);
 
-  let result: TypeResult = await response.json();
+  const result: TypeResult = await response.json();
 
   return result;
 };

@@ -61,7 +61,7 @@ export default function DeleteCategoryParent({
 
   const handleConfirm = async () => {
     try {
-      await softRemoveCategory(categoryId);
+      await softRemoveCategory(categoryId); // Gọi API để cập nhật isDeleted thành true
       message.success("Danh mục đã được xóa mềm.");
       onConfirm();
     } catch (error) {

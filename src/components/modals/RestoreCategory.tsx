@@ -59,7 +59,7 @@ export default function RestoreCategory({
     try {
       await restoreCategory(category._id); // Gọi API để khôi phục danh mục
       message.success("Danh mục đã được khôi phục.");
-      onConfirm();
+      onConfirm(); // Cập nhật danh sách trong MainTrash
     } catch (error) {
       message.error('Có lỗi xảy ra khi khôi phục danh mục.');
     }

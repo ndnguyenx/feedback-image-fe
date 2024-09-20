@@ -6,7 +6,7 @@ import Link from 'next/link';
 import MainTable from '@/components/tables/table-maincategory/MainTable';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import AddCategoryParent from '@/components/modals/AddCategoryParent';
-import { createCategory, deleteCategory, getCategories } from '@/apis/category/category.apis';
+import { createCategory, DeleteCategory, getCategories } from '@/apis/category/category.apis';
 import { ICategory } from '@/interfaces/models';
 
 export default function MainCategoryLayout() {

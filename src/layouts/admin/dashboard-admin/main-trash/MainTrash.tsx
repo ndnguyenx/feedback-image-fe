@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button, message } from 'antd';
 import styled from 'styled-components';
 import { ICategory } from '@/interfaces/models';
-import { getCategories } from '@/apis/category/category.apis';
+import { getCategories, restoreCategory } from '@/apis/category/category.apis';
 import RestoreCategory from '@/components/modals/RestoreCategory';
 
 const StyledTable = styled(Table)`
@@ -28,9 +28,8 @@ export default function MainTrash() {
 
   const fetchCategories = async () => {
     try {
-      const allCategories = await getCategories();
-      const trashedCategories = allCategories.filter(category => category.isDeleted);
-      setCategories(trashedCategories);
+      const response = await getCategories({ limit: 20, page: 1, isDeleted: true });
+      setCategories(response);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -47,18 +46,21 @@ export default function MainTrash() {
 
   const handleRestoreConfirm = async () => {
     if (selectedCategory) {
-      // Gọi API để khôi phục danh mục
-      await fetchCategories(); // Cập nhật danh sách
-      setRestoreVisible(false);
-      message.success("Danh mục đã được khôi phục.");
+      try {
+        await restoreCategory(selectedCategory._id); // Khôi phục danh mục
+        message.success("Danh mục đã được khôi phục.");
+        fetchCategories(); // Cập nhật danh sách
+        setRestoreVisible(false);
+      } catch (error) {
+        message.error("Có lỗi xảy ra khi khôi phục danh mục.");
+      }
     }
   };
 
   const columns = [
     {
       title: 'STT',
-      render: (_text: string, _record: ICategory, index: number) => index + 1, // Số thứ tự
-      key: 'stt',
+      render: (text: any, record: any, index: number) => index + 1, // Số thứ tự
     },
     { 
       title: 'Tên danh mục', 
@@ -68,7 +70,7 @@ export default function MainTrash() {
     {
       title: 'Hành động',
       key: 'action',
-      render: (_text: string, record: ICategory) => (
+      render: (text: any, record: any) => (
         <Button onClick={() => handleRestore(record)}>Khôi phục</Button>
       ),
     },

@@ -51,6 +51,7 @@ export interface IFeedBack extends IBaseModel {
   deletedBy: IUser | Types.ObjectId;
   createdBy: IUser | Types.ObjectId;
   updatedBy: IUser | Types.ObjectId ;
+  nameFeedback: string;
 }
 
 export interface ICategory extends IBaseModel {

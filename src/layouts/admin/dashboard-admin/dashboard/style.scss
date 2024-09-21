@@ -2,108 +2,34 @@
   width: auto;
   padding: 2rem;
   background-color: var(--color-background-admin-page);
-  .button-trash {
-    max-width: fit-content;
-    a > button {
-      transition: 0.3s ease;
-      // color: black;
-      // border: 1px solid var(--color-xam);
-      font-size: 1.3rem;
-
-      &:hover {
-        color: var(--color-white);
-        background-color: var(--color-xam);
-      }
-    }
-  }
-  .button-add > button {
-    transition: 0.3s ease;
-    color: var(--color-navbar);
-    border: 1px solid var(--color-navbar);
-    &:hover {
-      color: var(--color-white);
-      background-color: var(--color-navbar);
-    }
-  }
-
-  .dashboard-list-button {
-    justify-content: space-between;
-    align-items: center;
-    margin: 1rem auto;
-
-    .list-check {
-      display: inline-flex;
-      flex-direction: row;
-      justify-content: flex-start;
-      align-items: center;
-      gap: 2rem;
-    }
-  }
-
-  .dashboard-content {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 1rem;
-  }
 
   .content-item {
-    flex: 0 0 calc(16.66667% - 1rem);
-    max-width: calc(16.66667% - 1rem);
-    background-color: var(--color-white);
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px; // Khoảng cách giữa các card
   }
 }
-
-.ant-modal-content {
-  padding: 0 !important;
-}
-
-.ant-modal-header {
-  padding: 1rem !important;
-  background-color: var(--color-navbar) !important;
-  border-radius: 0;
-  .ant-modal-title {
-    color: var(--color-white) !important;
-  }
-}
-
-.ant-modal-close{
-  color: var(--color-white) !important;
-}
-
 
 @media screen and (max-width: 640px) {
   .dashboard-container {
     .content-item {
-      flex: 0 0 calc(100% - 1rem);
-      max-width: calc(100% - 1rem);
+      grid-template-columns: repeat(2, 1fr); // 2 cột trên màn hình nhỏ
     }
   }
 }
 
-@media screen and (min-width: 768px) and (max-width: 1200px) {
+@media screen and (min-width: 641px) and (max-width: 1200px) {
   .dashboard-container {
     .content-item {
-      flex: 0 0 calc(33% - 1rem);
-      max-width: calc(33% - 1rem);
+      grid-template-columns: repeat(3, 1fr); // 3 cột trên màn hình trung bình
     }
   }
 }
 
-@media screen and (min-width: 1201px) and (max-width: 1440px) {
+@media screen and (min-width: 1201px) {
   .dashboard-container {
     .content-item {
-      flex: 0 0 calc(25% - 1rem);
-      max-width: calc(25% - 1rem);
-    }
-  }
-}
-
-@media screen and ((min-width: 640px) and (max-width: 768px)) {
-  .dashboard-container {
-    .content-item {
-      flex: 0 0 calc(50% - 1rem);
-      max-width: calc(50% - 1rem);
+      grid-template-columns: repeat(5, 1fr); // 5 cột trên màn hình lớn
     }
   }
 }

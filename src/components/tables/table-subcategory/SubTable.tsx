@@ -1,10 +1,11 @@
-'use client'
+'use client';
 import React, { useState } from 'react';
-import { Table, Button } from 'antd';
+import { Table, Button, message } from 'antd';
 import { ISubCategory, ICategory } from '@/interfaces/models';
 import EditCategoryChild from '@/components/modals/EditCategoryChild';
 import DeleteCategoryChild from '@/components/modals/DeleteCategoryChild';
 import AddCategoryChild from '@/components/modals/AddCategoryChild';
+import { softRemoveSubCategory } from '@/apis/subCategory/subCategory.apis';
 
 interface ITableComponentProps {
   subCategories: ISubCategory[];
@@ -12,6 +13,7 @@ interface ITableComponentProps {
   selectedRowKeys: React.Key[];
   onRowSelectionChange: (newSelectedRowKeys: React.Key[]) => void;
   onAddCategory: (subCategoryData: Partial<ISubCategory>) => Promise<void>;
+  onRefreshSubCategories: () => Promise<void>; // Hàm để lấy lại danh sách sub-categories
 }
 
 const SubTable: React.FC<ITableComponentProps> = ({
@@ -19,7 +21,8 @@ const SubTable: React.FC<ITableComponentProps> = ({
   parentCategories,
   selectedRowKeys,
   onRowSelectionChange,
-  onAddCategory
+  onAddCategory,
+  onRefreshSubCategories, // Thêm prop mới
 }) => {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
@@ -35,6 +38,22 @@ const SubTable: React.FC<ITableComponentProps> = ({
   const showDeleteModal = (subCategoryId: string) => {
     setDeletingSubCategoryId(subCategoryId);
     setDeleteModalVisible(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (deletingSubCategoryId) {
+      try {
+        await softRemoveSubCategory(deletingSubCategoryId); // Gọi API để xóa mềm
+        message.success('Danh mục con đã được xóa mềm.'); // Hiển thị thông báo thành công
+        setDeleteModalVisible(false); // Đóng modal
+        setDeletingSubCategoryId(null); // Reset id
+        
+        // Gọi lại hàm lấy danh sách sub-categories
+        await onRefreshSubCategories();
+      } catch (error) {
+        message.error('Có lỗi xảy ra khi xóa danh mục con.'); 
+      }
+    }
   };
 
   const columns = [
@@ -96,6 +115,7 @@ const SubTable: React.FC<ITableComponentProps> = ({
       <DeleteCategoryChild
         isVisible={deleteModalVisible}
         onClose={() => setDeleteModalVisible(false)}
+        onConfirm={handleDeleteConfirm}
         subCategoryId={deletingSubCategoryId}
       />
       <AddCategoryChild

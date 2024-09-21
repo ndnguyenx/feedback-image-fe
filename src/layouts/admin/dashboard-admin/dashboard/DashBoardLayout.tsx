@@ -1,25 +1,38 @@
-"use client";
-import "./style.scss";
-import React from "react";
-import CardAdmin from "@/components/cards/Admin/CardAdmin";
-import { Flex } from "antd";
-import CustomCheckbox from "@/components/checkbox/checkbox";
-import { FaTrash } from "react-icons/fa";
-import { FaPlus } from "react-icons/fa6";
-import { useState } from "react";
-import ModalCreateComponent from "@/components/modals/CreateImage";
-import ButtonSimple from "@/components/buttons/ButtonSimple";
-import Link from "next/link";
+'use client';
+import React, { useState, useEffect } from 'react';
+import { Button } from 'antd';
+import styled from 'styled-components';
+import CreateFeedbackModal from '@/components/modals/CreateFeedbackModal';
+import CardAdmin from '@/components/cards/Admin/CardAdmin';
+import { IFeedBack } from '@/interfaces/models';
 
-export default function DashboardLayout(){
-  const [isChecked, setIsChecked] = useState(false);
+const DashboardContent = styled.div`
+  .content-item {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+`;
+
+export default function DashboardLayout() {
+  const [uploadedImages, setUploadedImages] = useState<IFeedBack[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
-  const handleCheckboxChange = (checked: boolean) => {
-    setIsChecked(checked);
-  };
+  useEffect(() => {
+    const fetchFeedbacks = async () => {
+      try {
+        const response = await fetch('http://localhost:3006/api/v1/feedback');
+        const data = await response.json();
+        setUploadedImages(data.data);
+      } catch (error) {
+        console.error('Error fetching feedback:', error);
+      }
+    };
 
-  const showModal = () => {
+    fetchFeedbacks();
+  }, []);
+
+  const handleOpenModal = () => {
     setIsModalVisible(true);
   };
 
@@ -27,47 +40,27 @@ export default function DashboardLayout(){
     setIsModalVisible(false);
   };
 
+  const handleRefreshImages = (newImage: IFeedBack) => {
+    setUploadedImages((prev) => [...prev, newImage]);
+  };
+
   return (
-    <div className="dashboard-container">
-      <Flex justify="space-between" align="center">
-        <Flex gap="small">
-          <div className="button-trash">
-            <Link href={"/admin/trash?isDeleted=true"}>
-              <ButtonSimple icon={FaTrash} />
-            </Link>
-          </div>
-          <div hidden>
-            <ButtonSimple text="Xóa" icon={FaTrash} />
-          </div>
-        </Flex>
-        <div className="button-add">
-          <ButtonSimple
-            icon={FaPlus}
-            onClick={showModal}
-          />
-        </div>
-      </Flex>
-      <div className="dashboard-list-button">
-        <div className="list-check">
-          <CustomCheckbox
-            label="Chọn tất cả"
-            checked={isChecked}
-            onChange={handleCheckboxChange}
-          />
-        </div>
+    <DashboardContent>
+      <Button type="primary" onClick={handleOpenModal}>
+        Add New Feedback
+      </Button>
+
+      <div className="content-item">
+        {uploadedImages.map((image) => (
+          <CardAdmin key={image?._id} image={image} />
+        ))}
       </div>
 
-      <div className="dashboard-content">
-        <div className="content-item">
-          <CardAdmin />
-        </div>
-      </div>
-      <ModalCreateComponent
+      <CreateFeedbackModal
         isVisible={isModalVisible}
         onClose={handleCloseModal}
+        onUploadComplete={handleRefreshImages}
       />
-    </div>
+    </DashboardContent>
   );
-};
-
-
+}

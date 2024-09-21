@@ -1,4 +1,4 @@
-import SubTrashLayout from "@/layouts/admin/dashboard-admin/trash/SubTrash";
+import SubTrashLayout from "@/layouts/admin/dashboard-admin/sub-trash/SubTrash";
 
 const SubCategory = () => {
   return (

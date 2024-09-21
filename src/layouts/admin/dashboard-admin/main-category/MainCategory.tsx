@@ -41,7 +41,7 @@ export default function MainCategoryLayout() {
   const handleDeleteCategories = async () => {
     try {
       for (const key of selectedRowKeys) {
-        await deleteCategory(key.toString());
+        await DeleteCategory(key.toString());
       }
       const updatedCategories = await getCategories();
       setCategories(updatedCategories);
@@ -94,7 +94,7 @@ export default function MainCategoryLayout() {
             onRowSelectionChange={handleRowSelectionChange}
             categories={categories}
             onDeleteCategory={async (id: string) => {
-              await deleteCategory(id);
+              await DeleteCategory(id);
               const updatedCategories = await getCategories();
               setCategories(updatedCategories);
             }}

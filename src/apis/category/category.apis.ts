@@ -73,6 +73,30 @@ export async function DeleteCategory(id: string) {
   }
 }
 
+// sửa danh mục
+
+export const updateCategory = async (id: string, name: string) => {
+  const response = await fetch(`http://localhost:3006/api/v1/category/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ name }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Có lỗi xảy ra khi cập nhật danh mục.');
+  }
+
+  const result = await response.json();
+  if (result.error) {
+    throw new Error(result.error);
+  }
+
+  return result;
+};
+
+
 // Lấy danh sách các danh mục
 export async function getCategories(queryParams?: any): Promise<ICategory[]> {
   try {

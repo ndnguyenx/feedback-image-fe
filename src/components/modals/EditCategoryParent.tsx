@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal, message } from "antd";
 import styled from "styled-components";
+import { updateCategory } from "@/apis/category/category.apis"; // Import hàm updateCategory
 
 const StyledModalContent = styled.div`
   .modal-body {
@@ -97,25 +98,9 @@ export default function EditCategoryParent({
       message.error("Tên danh mục không được để trống.");
       return;
     }
-  
+
     try {
-      const response = await fetch(`http://localhost:3006/api/v1/category/${categoryId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name }),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Có lỗi xảy ra khi cập nhật danh mục.');
-      }
-  
-      const result = await response.json();
-      if (result.error) {
-        throw new Error(result.error);
-      }
-  
+      await updateCategory(categoryId, name); // Gọi hàm updateCategory
       message.success("Danh mục đã được cập nhật thành công!");
       onClose();
     } catch (error) {
@@ -126,7 +111,7 @@ export default function EditCategoryParent({
       }
     }
   };
-  
+
   return (
     <Modal
       title="Chỉnh Sửa Danh Mục Chính"

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Form, Input, Button } from "antd";
-import { updateSubCategory, getAllSubCategories } from "@/apis/subCategory/subCategory.apis";
+import { Modal, Form, Input, Button, message } from "antd";
+import { updateSubCategory } from "@/apis/subCategory/subCategory.apis";
 import { ISubCategory } from "@/interfaces/models";
 
 interface EditCategoryChildProps {
@@ -8,36 +8,27 @@ interface EditCategoryChildProps {
   onClose: () => void;
   subCategoryId: string | null;
   subCategoryName: string | null;
-  cateId: string | null;
+  cateId: string | null; // Duy trì nếu cần thiết, nếu không có thể bỏ qua
 }
 
-const EditCategoryChild: React.FC<EditCategoryChildProps> = ({ isVisible, onClose, subCategoryId, subCategoryName, cateId }) => {
+const EditCategoryChild: React.FC<EditCategoryChildProps> = ({ isVisible, onClose, subCategoryId, subCategoryName }) => {
   const [form] = Form.useForm();
-  const [subCategories, setSubCategories] = useState<ISubCategory[]>([]);
 
   useEffect(() => {
     if (isVisible && subCategoryId) {
       form.setFieldsValue({ name: subCategoryName });
-      fetchSubCategories();
     }
-  }, [isVisible, subCategoryId]);
-
-  const fetchSubCategories = async () => {
-    try {
-      const result = await getAllSubCategories();
-      setSubCategories(result);
-    } catch (error) {
-      console.error('Error fetching sub-categories:', error);
-    }
-  };
+  }, [isVisible, subCategoryId, subCategoryName]);
 
   const handleEditCategory = async (values: Partial<ISubCategory>) => {
     if (subCategoryId) {
       try {
         await updateSubCategory(subCategoryId, values);
+        message.success("Danh mục con đã được cập nhật thành công!");
         form.resetFields();
-        onClose(); // Close modal after successful update
+        onClose(); // Đóng modal sau khi cập nhật thành công
       } catch (error) {
+        message.error('Có lỗi xảy ra khi cập nhật danh mục con.');
         console.error('Error updating category:', error);
       }
     }

@@ -30,9 +30,9 @@ export default function MainCategoryLayout() {
     try {
       await createCategory(categoryData);
       const updatedCategories = await getCategories();
-      setCategories(updatedCategories); // Cập nhật lại danh sách
-      resetForm(); // Reset form sau khi thêm
-      setIsModalVisible(false); // Đóng modal sau khi thêm thành công
+      setCategories(updatedCategories);
+      resetForm();
+      setIsModalVisible(false);
     } catch (error) {
       console.error('Error adding category:', error);
     }
@@ -45,7 +45,7 @@ export default function MainCategoryLayout() {
       }
       const updatedCategories = await getCategories();
       setCategories(updatedCategories);
-      setSelectedRowKeys([]); // Xóa selection sau khi xóa
+      setSelectedRowKeys([]);
     } catch (error) {
       console.error('Error deleting categories:', error);
     }
@@ -83,10 +83,6 @@ export default function MainCategoryLayout() {
           <ButtonSimple icon={FaPlus} onClick={showModal} />
         </div>
       </Flex>
-      <div className="dashboard-search">
-        <label htmlFor="search" className="dashboard-search-label">Tìm Kiếm:</label>
-        <input type="text" className="dashboard-search-input" id="search" />
-      </div>
       <div className="dashboard-table">
         <div className="table-item">
           <MainTable

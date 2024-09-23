@@ -3,7 +3,31 @@
   padding: 2rem;
   background-color: var(--color-background-admin-page);
 
+  .add-feedback-container {
+    margin-bottom: 2rem; // Khoảng cách với danh sách ảnh
+  }
+
+  .add-feedback-button {
+    background-color: #4caf50; // Màu nền hiện đại
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+
+    &:hover {
+      background-color: #45a049; // Màu khi hover
+    }
+
+    svg {
+      margin-right: 0.5rem; // Khoảng cách giữa icon và text
+    }
+  }
+
   .content-item {
+    padding: 2rem; // Padding cho danh sách ảnh
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 16px; // Khoảng cách giữa các card
@@ -29,7 +53,7 @@
 @media screen and (min-width: 1201px) {
   .dashboard-container {
     .content-item {
-      grid-template-columns: repeat(5, 1fr); // 5 cột trên màn hình lớn
+      grid-template-columns: repeat(4, 1fr); // 5 cột trên màn hình lớn
     }
   }
 }

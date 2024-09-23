@@ -85,8 +85,6 @@ border-bottom: 2px solid rgb(22, 125, 208);
 `
 
 
-
-
 interface Props {
     items: string[];
     onItemClick: (item: string) => void;

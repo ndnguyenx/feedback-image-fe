@@ -86,7 +86,7 @@ export async function updateSubCategory(id: string, payload: Partial<ISubCategor
     const result = await api<IBaseResponse<ISubCategory>>({
       url: `${API_URL}/${id}`,
       options: {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify(payload),
         headers: {
           'Content-Type': 'application/json',

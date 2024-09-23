@@ -32,6 +32,10 @@ const StyledTrashIcon = styled.div`
   }
 `;
 
+const StyledSearchInput = styled(Input)`
+  width: 200px; /* Đặt chiều rộng nhỏ lại */
+`;
+
 export default function SubCategoryLayout() {
   const [subCategories, setSubCategories] = useState<ISubCategory[]>([]);
   const [parentCategories, setParentCategories] = useState<ICategory[]>([]);
@@ -106,7 +110,7 @@ export default function SubCategoryLayout() {
       </Flex>
       <div className="dashboard-search">
         <label htmlFor="search" className="dashboard-search-label">Tìm Kiếm:</label>
-        <Input
+        <StyledSearchInput
           type="text"
           placeholder="Nhập tên danh mục con"
           value={searchTerm}
@@ -114,7 +118,7 @@ export default function SubCategoryLayout() {
           className="dashboard-search-input"
         />
       </div>
-      <div className="dashboard-table">
+      <div style={{ marginTop: '1rem' }} className="dashboard-table"> {/* Cách table 1rem */}
         <SubTable
           subCategories={filteredSubCategories}
           parentCategories={parentCategories}

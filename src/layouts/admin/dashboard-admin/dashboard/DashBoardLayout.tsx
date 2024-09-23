@@ -3,16 +3,19 @@ import React, { useState, useEffect } from 'react';
 import { Button } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import CreateFeedbackModal from '@/components/modals/CreateFeedbackModal';
+import EditDashboardItem from '@/components/modals/EditDashboardItem';
 import CardAdmin from '@/components/cards/Admin/CardAdmin';
 import DeleteDashboardItem from '@/components/modals/DeleteDashboardItem';
 import { IFeedBack } from '@/interfaces/models';
-import './style.scss'; // Nhớ import file SCSS
+import './style.scss';
 
 export default function DashboardLayout() {
   const [uploadedImages, setUploadedImages] = useState<IFeedBack[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editModalVisible, setEditModalVisible] = useState(false); 
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [selectedFeedbackId, setSelectedFeedbackId] = useState<string | null>(null);
+  const [selectedFeedback, setSelectedFeedback] = useState<IFeedBack | null>(null);
 
   const fetchFeedbacks = async () => {
     try {
@@ -25,7 +28,7 @@ export default function DashboardLayout() {
   };
 
   useEffect(() => {
-    fetchFeedbacks(); // Gọi hàm khi component được mount
+    fetchFeedbacks();
   }, []);
 
   const handleOpenModal = () => {
@@ -34,6 +37,15 @@ export default function DashboardLayout() {
 
   const handleCloseModal = () => {
     setIsModalVisible(false);
+  };
+
+  const handleOpenEditModal = (feedback: IFeedBack) => {
+    setSelectedFeedback(feedback);
+    setEditModalVisible(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setEditModalVisible(false);
   };
 
   const handleRefreshImages = (newImage: IFeedBack) => {
@@ -47,19 +59,18 @@ export default function DashboardLayout() {
 
   const handleConfirmDelete = () => {
     setDeleteModalVisible(false);
-    fetchFeedbacks(); // Cập nhật danh sách sau khi xóa
+    fetchFeedbacks();
   };
 
   return (
     <div className="dashboard-container">
       <div className="add-feedback-container">
         <Button className="add-feedback-button" onClick={handleOpenModal}>
-          <PlusOutlined /> Thêm Phản Hồi
+          <PlusOutlined /> Thêm ảnh
         </Button>
         <Button
           className="trash-button"
-          style={{ marginLeft: 'auto' }}
-          onClick={() => window.location.href = '/dashboard-trash'}
+          onClick={() => window.location.href = '/admin/dashboard-trash'}
         >
           <DeleteOutlined />
         </Button>
@@ -71,7 +82,7 @@ export default function DashboardLayout() {
             key={image?._id} 
             image={image} 
             onDelete={() => handleDelete(image._id)} 
-            onEdit={() => {}}
+            onEdit={() => handleOpenEditModal(image)} 
           />
         ))}
       </div>
@@ -80,6 +91,13 @@ export default function DashboardLayout() {
         isVisible={isModalVisible}
         onClose={handleCloseModal}
         onUploadComplete={handleRefreshImages}
+      />
+
+      <EditDashboardItem
+        isVisible={editModalVisible}
+        onClose={handleCloseEditModal}
+        feedbackId={selectedFeedback?._id || null}
+        onUpdateComplete={fetchFeedbacks}
       />
 
       <DeleteDashboardItem

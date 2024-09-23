@@ -26,14 +26,34 @@
 
 .card-title {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.2rem; // Giảm kích thước chữ
   font-weight: 600;
   color: #333;
+  text-align: left; // Căn trái
+  margin-top: 1rem; // Khoảng cách giữa hình ảnh và tiêu đề
+  overflow: hidden; // Ẩn overflow
+  text-overflow: ellipsis; // Hiển thị dấu ...
+  white-space: nowrap; // Không cho xuống dòng
 }
 
 .card-description {
-  margin: 8px 0 0;
+  margin: 1rem 0 0; // Khoảng cách 1rem giữa tiêu đề và mô tả
   font-size: 1rem;
   color: #666;
   line-height: 1.4;
+  overflow: hidden; // Ẩn overflow
+  text-overflow: ellipsis; // Hiển thị dấu ...
+  display: -webkit-box; // Hiển thị dưới dạng box
+  -webkit-line-clamp: 2; // Số dòng tối đa
+  -webkit-box-orient: vertical; // Hướng box
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end; // Căn phải
+  margin-top: 1rem; // Khoảng cách 1rem giữa mô tả và nút
+}
+
+.action-button {
+  margin-left: 1rem; // Khoảng cách giữa các nút
 }

@@ -3,25 +3,35 @@
   padding: 2rem;
 }
 
-.button-delete, .button-add {
+.button-delete, .button-add, .list-check {
   max-width: fit-content;
   margin-top: 3px;
   button {
+    width: 120px; /* Đảm bảo cùng chiều rộng cho button */
+    height: 40px; /* Đảm bảo cùng chiều cao cho button */
     transition: 0.3s ease;
     border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     svg {
       margin-right: 0 !important;
     }
   }
 }
 
-.button-delete a > button {
+.button-delete a > button, .list-check > button {
+  width: 120px; /* Đặt cùng kích thước chiều rộng */
   color: #6c6c6c;
   border: 1px solid #6c6c6c;
   &:hover {
     color: var(--color-white);
     background-color: var(--color-xam);
   }
+}
+
+.list-check {
+  margin-left: 1rem; /* Cách 1rem so với button-delete */
 }
 
 .button-add > button {

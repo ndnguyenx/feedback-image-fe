@@ -100,15 +100,11 @@ export default function EditCategoryParent({
     }
 
     try {
-      await updateCategory(categoryId, name); // Gọi hàm updateCategory
+      const response = await updateCategory(categoryId, {name: name}); // Gọi hàm updateCategory
       message.success("Danh mục đã được cập nhật thành công!");
+      console.log(response);
       onClose();
     } catch (error) {
-      if (error instanceof Error) {
-        message.error(`Có lỗi xảy ra khi cập nhật danh mục: ${error.message}`);
-      } else {
-        message.error('Có lỗi xảy ra khi cập nhật danh mục.');
-      }
     }
   };
 

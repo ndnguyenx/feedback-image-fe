@@ -68,40 +68,47 @@ export default function CreateFeedbackModal({
 
   return (
     <Modal title="Tạo phản hồi" visible={isVisible} onCancel={onClose} footer={null}>
-      <Input
-        placeholder="Tên hình ảnh"
-        value={imgName}
-        onChange={(e) => setImgName(e.target.value)}
-      />
-      <Input.TextArea
-        placeholder="Mô tả hình ảnh"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <Select
-        placeholder="Chọn danh mục con"
-        style={{ width: '100%' }}
-        onChange={(value) => setSelectedSubCategory(value)}
-      >
-        {subCategories.length > 0 ? (
-          subCategories.map((subCategory) => (
-            <Select.Option key={subCategory._id} value={subCategory._id}>
-              {subCategory.name}
-            </Select.Option>
-          ))
-        ) : (
-          <Select.Option disabled>Không có danh mục con nào</Select.Option>
-        )}
-      </Select>
-      <input 
-        type="file" 
-        accept="image/*" 
-        onChange={handleFileChange} 
-        style={{ marginTop: '10px' }} 
-      />
-      <Button type="primary" onClick={handleSubmit} style={{ marginTop: '10px' }}>
-        Thêm
-      </Button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <Input
+          placeholder="Tên hình ảnh"
+          value={imgName}
+          onChange={(e) => setImgName(e.target.value)}
+        />
+        <Input.TextArea
+          placeholder="Mô tả hình ảnh"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <Select
+          placeholder="Chọn danh mục con"
+          style={{ width: '100%' }}
+          onChange={(value) => setSelectedSubCategory(value)}
+        >
+          {subCategories.length > 0 ? (
+            subCategories.map((subCategory) => (
+              <Select.Option key={subCategory._id} value={subCategory._id}>
+                {subCategory.name}
+              </Select.Option>
+            ))
+          ) : (
+            <Select.Option disabled>Không có danh mục con nào</Select.Option>
+          )}
+        </Select>
+        <input 
+          type="file" 
+          accept="image/*" 
+          onChange={handleFileChange} 
+          style={{ marginTop: '10px' }} 
+        />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
+        <Button 
+          type="primary" 
+          onClick={handleSubmit}
+        >
+          Thêm
+        </Button>
+      </div>
     </Modal>
   );
 }

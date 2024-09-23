@@ -1,43 +1,56 @@
 .dashboard-trash-container {
-    width: auto;
-    padding: 2rem;
-    background-color: var(--color-background-admin-page);
-  
-    h2 {
-      margin-bottom: 2rem; // Khoảng cách với danh sách phản hồi đã xóa
-      font-size: 2rem; // Kích thước chữ cho tiêu đề
-      color: #333; // Màu chữ
+  width: auto;
+  padding: 2rem;
+  background-color: var(--color-background-admin-page);
+
+  h2 {
+    margin-bottom: 2rem; // Khoảng cách với danh sách phản hồi đã xóa
+    font-size: 2rem; // Kích thước chữ cho tiêu đề
+    color: #333; // Màu chữ
+  }
+
+  .back-button {
+    font-size: 1.2rem; // Kích thước chữ lớn hơn cho nút quay lại
+    padding: 0.5rem 1rem; // Padding cho nút
+    display: flex;
+    align-items: center; // Căn giữa icon và text
+    margin-bottom: 1rem; // Khoảng cách với danh sách
+
+    // Thêm icon mũi tên quay về
+    &::before {
+      content: '←'; // Có thể thay thế bằng icon từ thư viện như Font Awesome hoặc Ant Design
+      margin-right: 0.5rem; // Khoảng cách giữa icon và text
     }
-  
+  }
+
+  .content-item {
+    padding: 2rem; // Padding cho danh sách phản hồi đã xóa
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px; // Khoảng cách giữa các card
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .dashboard-trash-container {
     .content-item {
-      padding: 2rem; // Padding cho danh sách phản hồi đã xóa
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 16px; // Khoảng cách giữa các card
+      grid-template-columns: repeat(2, 1fr); // 2 cột trên màn hình nhỏ
     }
   }
-  
-  @media screen and (max-width: 640px) {
-    .dashboard-trash-container {
-      .content-item {
-        grid-template-columns: repeat(2, 1fr); // 2 cột trên màn hình nhỏ
-      }
+}
+
+@media screen and (min-width: 641px) and (max-width: 1200px) {
+  .dashboard-trash-container {
+    .content-item {
+      grid-template-columns: repeat(3, 1fr); // 3 cột trên màn hình trung bình
     }
   }
-  
-  @media screen and (min-width: 641px) and (max-width: 1200px) {
-    .dashboard-trash-container {
-      .content-item {
-        grid-template-columns: repeat(3, 1fr); // 3 cột trên màn hình trung bình
-      }
+}
+
+@media screen and (min-width: 1201px) {
+  .dashboard-trash-container {
+    .content-item {
+      grid-template-columns: repeat(4, 1fr); // 4 cột trên màn hình lớn
     }
   }
-  
-  @media screen and (min-width: 1201px) {
-    .dashboard-trash-container {
-      .content-item {
-        grid-template-columns: repeat(4, 1fr); // 5 cột trên màn hình lớn
-      }
-    }
-  }
-  
+}

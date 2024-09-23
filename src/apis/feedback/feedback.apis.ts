@@ -22,6 +22,24 @@ export async function createFeedback(formData: FormData) {
   }
 }
 
+// Cập nhật phản hồi
+export async function updateFeedback(id: string, data: Partial<IFeedBack>) {
+  try {
+    const result = await api<IBaseResponse<IFeedBack>>({
+      url: `${API_URL}/${id}`, // Endpoint cập nhật
+      options: {
+        method: 'PATCH', // Sử dụng PATCH để cập nhật
+        body: JSON.stringify(data), // Gửi dữ liệu cần cập nhật
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error('Error updating feedback:', error);
+    throw error;
+  }
+}
+
+
 // Xóa mềm phản hồi
 export async function softRemoveFeedback(id: string) {
   try {

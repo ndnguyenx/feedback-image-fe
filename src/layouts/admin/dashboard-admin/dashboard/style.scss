@@ -4,40 +4,54 @@
   background-color: var(--color-background-admin-page);
 
   .add-feedback-container {
-    margin-bottom: 2rem; // Khoảng cách với danh sách ảnh
-  }
+    display: flex; // Đặt flex để căn chỉnh ngang
+    align-items: center; // Căn giữa theo chiều dọc
 
-  .add-feedback-button {
-    background-color: #4caf50; // Màu nền hiện đại
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
+    .add-feedback-button {
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.5rem 1rem; // Kích thước nút
+      font-size: 0.9rem; // Kích thước font
+      display: flex;
+      align-items: center;
 
-    &:hover {
-      background-color: #45a049; // Màu khi hover
+      &:hover {
+        background-color: #45a049; 
+      }
+
+      svg {
+        margin-right: 0.5rem;
+      }
     }
 
-    svg {
-      margin-right: 0.5rem; // Khoảng cách giữa icon và text
+    .trash-button {
+      margin-left: 2rem; // Cách nút "Thêm Phản Hồi" 2rem
+      font-size: 1.5rem; // Tăng kích thước icon
+      background: transparent; // Nền trong suốt
+      border: none; // Bỏ viền
+      color: inherit; // Giữ nguyên màu sắc
+
+      &:hover {
+        color: #ff4d4f; // Màu khi hover
+      }
     }
   }
 
   .content-item {
-    padding: 2rem; // Padding cho danh sách ảnh
+    padding: 2rem;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 16px; // Khoảng cách giữa các card
   }
 }
 
+// Media queries giữ nguyên như trước
 @media screen and (max-width: 640px) {
   .dashboard-container {
     .content-item {
-      grid-template-columns: repeat(2, 1fr); // 2 cột trên màn hình nhỏ
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 }
@@ -45,7 +59,7 @@
 @media screen and (min-width: 641px) and (max-width: 1200px) {
   .dashboard-container {
     .content-item {
-      grid-template-columns: repeat(3, 1fr); // 3 cột trên màn hình trung bình
+      grid-template-columns: repeat(3, 1fr);
     }
   }
 }
@@ -53,7 +67,7 @@
 @media screen and (min-width: 1201px) {
   .dashboard-container {
     .content-item {
-      grid-template-columns: repeat(4, 1fr); // 5 cột trên màn hình lớn
+      grid-template-columns: repeat(4, 1fr);
     }
   }
 }

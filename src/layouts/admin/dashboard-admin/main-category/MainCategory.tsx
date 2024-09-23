@@ -6,11 +6,13 @@ import Link from 'next/link';
 import MainTable from '@/components/tables/table-maincategory/MainTable';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import AddCategoryParent from '@/components/modals/AddCategoryParent';
-import { createCategory, DeleteCategory, getCategories } from '@/apis/category/category.apis';
+import DeleteMultiParent from '@/components/modals/DeleteMultiParent'; // Import modal xóa nhiều mục
+import { createCategory, getCategories } from '@/apis/category/category.apis';
 import { ICategory } from '@/interfaces/models';
 
 export default function MainCategoryLayout() {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isMultiDeleteModalVisible, setIsMultiDeleteModalVisible] = useState(false); // State cho modal xóa nhiều
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [categories, setCategories] = useState<ICategory[]>([]);
 
@@ -39,16 +41,13 @@ export default function MainCategoryLayout() {
   };
 
   const handleDeleteCategories = async () => {
-    try {
-      for (const key of selectedRowKeys) {
-        await DeleteCategory(key.toString());
-      }
-      const updatedCategories = await getCategories();
-      setCategories(updatedCategories);
-      setSelectedRowKeys([]);
-    } catch (error) {
-      console.error('Error deleting categories:', error);
-    }
+    setIsMultiDeleteModalVisible(true); // Hiển thị modal xóa nhiều mục
+  };
+
+  const handleMultiDeleteConfirm = async (selectedKeys: React.Key[]) => {
+    const updatedCategories = await getCategories(); // Lấy lại danh sách categories
+    setCategories(updatedCategories);
+    setSelectedRowKeys([]); // Xóa lựa chọn sau khi xóa
   };
 
   useEffect(() => {
@@ -90,7 +89,6 @@ export default function MainCategoryLayout() {
             onRowSelectionChange={handleRowSelectionChange}
             categories={categories}
             onDeleteCategory={async (id: string) => {
-              await DeleteCategory(id);
               const updatedCategories = await getCategories();
               setCategories(updatedCategories);
             }}
@@ -104,6 +102,12 @@ export default function MainCategoryLayout() {
         isVisible={isModalVisible}
         onClose={handleCloseModal}
         onAddCategory={handleAddCategory}
+      />
+      <DeleteMultiParent
+        isVisible={isMultiDeleteModalVisible}
+        onClose={() => setIsMultiDeleteModalVisible(false)}
+        onConfirm={handleMultiDeleteConfirm}
+        selectedKeys={selectedRowKeys}
       />
     </div>
   );

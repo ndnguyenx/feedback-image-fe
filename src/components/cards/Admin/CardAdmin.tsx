@@ -14,11 +14,11 @@ export default function CardAdmin({ image, onDelete, onEdit }: CardAdminProps) {
     <div className="card-container">
       <img alt={image?.nameFeedback} src={image?.url} className="card-image" />
       <div className="card-content">
-        <h3 className="card-title">{image?.nameFeedback}</h3>
+        <h5 className="card-title">{image?.nameFeedback}</h5>
         <p className="card-description">{image?.description}</p>
         <div className="card-actions">
-          <Button onClick={onEdit} type="primary" style={{ marginRight: '1rem' }}>Sửa</Button>
-          <Button onClick={onDelete} type="link">Xóa</Button>
+          <Button onClick={onEdit} type="primary" className="action-button">Sửa</Button>
+          <Button onClick={onDelete} type="link" className="action-button">Xóa</Button>
         </div>
       </div>
     </div>

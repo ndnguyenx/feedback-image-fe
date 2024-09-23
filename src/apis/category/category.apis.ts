@@ -2,6 +2,7 @@
 import { api } from '@/helpers/api.helper';
 import { IBaseResponse } from '@/interfaces/IBaseResponse.interfaces';
 import { ICategory } from '@/interfaces/models';
+import { Result } from 'postcss';
 
 const API_URL = 'http://localhost:3006/api/v1/category';
 
@@ -75,25 +76,20 @@ export async function DeleteCategory(id: string) {
 
 // sửa danh mục
 
-export const updateCategory = async (id: string, name: string) => {
-  const response = await fetch(`http://localhost:3006/api/v1/category/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ name }),
-  });
-
-  if (!response.ok) {
-    throw new Error('Có lỗi xảy ra khi cập nhật danh mục.');
+export const updateCategory = async (id: string, name: {name: string}) => {
+  try {
+    const result = await api<IBaseResponse<ICategory>>({
+      url: `${API_URL}/${id}`, // Endpoint cho soft delete
+      options: {
+        method: 'PATCH', 
+        body: JSON.stringify( name ), // Gửi id, isDeleted và deletedAt
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error('Error soft deleting category:', error);
+    throw error;
   }
-
-  const result = await response.json();
-  if (result.error) {
-    throw new Error(result.error);
-  }
-
-  return result;
 };
 
 

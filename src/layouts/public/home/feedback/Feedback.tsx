@@ -6,6 +6,7 @@ import CategoryItem from "./feedback-item/FeedbackItem";
 import { IFeedBack } from '@/interfaces/models';
 import { getCategories } from '@/apis/category/category.apis'; // Hàm lấy danh sách danh mục
 import { getFeedbacks } from '@/apis/feedback/feedback.apis'; // Hàm lấy phản hồi
+import { getAllSubCategories } from '@/apis/subCategory/subCategory.apis'; // Hàm lấy danh sách danh mục con
 
 const CategoryStyled = styled.div<{ productCount: number }>`
   .category-wrapper {
@@ -33,6 +34,7 @@ const CategoryStyled = styled.div<{ productCount: number }>`
 export function Category() {
   const [filteredProducts, setFilteredProducts] = useState<IFeedBack[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
+  const [subCategories, setSubCategories] = useState<{[key: string]: string}>({}); // Lưu subCategories theo id
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +44,14 @@ export function Category() {
 
         const feedbackItems = await getFeedbacks();
         setFilteredProducts(feedbackItems);
+
+        // Lấy danh sách danh mục con
+        const subCategoriesData = await getAllSubCategories();
+        const subCategoryMap = subCategoriesData.reduce((acc, subCat) => {
+          acc[subCat.id] = subCat.name; // Giả sử subCat có id và name
+          return acc;
+        }, {} as {[key: string]: string});
+        setSubCategories(subCategoryMap);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -67,7 +77,7 @@ export function Category() {
           <CategoryItem
             key={product._id}
             name={product.nameFeedback} // Tên phản hồi
-            // type={product.CategoryID.name} // Tên danh mục
+            subCategory={subCategories[product.subCategoryID] || 'Chưa xác định'} // Hiển thị subCategory
             image={product.url} // URL hình ảnh
             description={product.description} // Mô tả
           />

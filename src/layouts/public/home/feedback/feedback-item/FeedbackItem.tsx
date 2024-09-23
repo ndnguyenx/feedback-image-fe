@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { IoMdClose } from "react-icons/io";
 
@@ -69,7 +69,7 @@ const ModalContent = styled.div`
   position: relative;
   background-color: white;
   width: 70%;
-  max-height: 55rem;
+  max-height: 90vh;
   border-radius: 0.3rem;
   display: flex;
   flex-direction: column;
@@ -103,9 +103,14 @@ const ModalContent = styled.div`
 
   .modal-body {
     text-align: center;
-    max-height: 47.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    padding-top: 15rem;
     overflow-y: auto;
-    padding-top: 2rem;
 
     &-info {
       margin: 2rem;
@@ -116,24 +121,23 @@ const ModalContent = styled.div`
       gap: 0.5rem;
     }
   }
+`;
 
-  .modal-footer {
-    border-top: 1px solid #dee2e6;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.625rem;
-  }
+const ModalImage = styled.img`
+  max-height: 500px;
+  width: auto;
+  height: auto;
+  margin: 0 auto;
 `;
 
 interface IProps {
   name: string;
-  type: string;
+  subCategory: string; // Thay đổi từ type sang subCategory
   image: string;
   description: string;
 }
 
-function CategoryItem({ name, type, image, description }: IProps) {
+function CategoryItem({ name, subCategory, image, description }: IProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
@@ -146,7 +150,7 @@ function CategoryItem({ name, type, image, description }: IProps) {
         <div className="overlay"></div>
         <div className='item-info'>
           <p>{name}</p>
-          <p>Type: {type}</p>
+          <p>SubCategory: {subCategory}</p> {/* Thay đổi ở đây */}
         </div>
       </CategoryItemStyled>
       {isModalOpen && (
@@ -157,11 +161,11 @@ function CategoryItem({ name, type, image, description }: IProps) {
               <IoMdClose className='modal-close' onClick={closeModal} />
             </div>
             <div className='modal-body'>
-              <img src={image} alt={name} className='modal-body-img' />
+              <ModalImage src={image} alt={name} />
               <div className='modal-body-info'>
                 <h6>Thông tin chi tiết</h6>
                 <p>{name}</p>
-                <p>Type: {type}</p>
+                <p>SubCategory: {subCategory}</p> {/* Thay đổi ở đây */}
                 <p>{description}</p>
               </div>
             </div>

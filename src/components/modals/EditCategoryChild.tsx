@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Modal, Form, Input, Button, message } from "antd";
 import { updateSubCategory } from "@/apis/subCategory/subCategory.apis";
 import { ISubCategory } from "@/interfaces/models";
@@ -6,31 +6,38 @@ import { ISubCategory } from "@/interfaces/models";
 interface EditCategoryChildProps {
   isVisible: boolean;
   onClose: () => void;
-  subCategoryId: string | null;
-  subCategoryName: string | null;
-  cateId: string | null; // Duy trì nếu cần thiết, nếu không có thể bỏ qua
+  subCategoryId: string; // Chỉ nhận string
+  subCategoryName: string; // Chỉ nhận string
+  cateId?: string; // Có thể để là string hoặc undefined
+  onRefreshSubCategories: () => Promise<void>; // Thêm props
 }
 
-const EditCategoryChild: React.FC<EditCategoryChildProps> = ({ isVisible, onClose, subCategoryId, subCategoryName }) => {
+const EditCategoryChild: React.FC<EditCategoryChildProps> = ({
+  isVisible,
+  onClose,
+  subCategoryId,
+  subCategoryName,
+  cateId,
+  onRefreshSubCategories,
+}) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (isVisible && subCategoryId) {
+    if (isVisible) {
       form.setFieldsValue({ name: subCategoryName });
     }
-  }, [isVisible, subCategoryId, subCategoryName]);
+  }, [isVisible, subCategoryName]);
 
   const handleEditCategory = async (values: Partial<ISubCategory>) => {
-    if (subCategoryId) {
-      try {
-        await updateSubCategory(subCategoryId, values);
-        message.success("Danh mục con đã được cập nhật thành công!");
-        form.resetFields();
-        onClose(); // Đóng modal sau khi cập nhật thành công
-      } catch (error) {
-        message.error('Có lỗi xảy ra khi cập nhật danh mục con.');
-        console.error('Error updating category:', error);
-      }
+    try {
+      await updateSubCategory(subCategoryId, { ...values, categoryID: cateId });
+      message.success("Danh mục con đã được cập nhật thành công!");
+      form.resetFields();
+      await onRefreshSubCategories(); // Gọi lại hàm refresh
+      onClose(); // Đóng modal sau khi cập nhật thành công
+    } catch (error) {
+      message.error('Có lỗi xảy ra khi cập nhật danh mục con.');
+      console.error('Error updating category:', error);
     }
   };
 

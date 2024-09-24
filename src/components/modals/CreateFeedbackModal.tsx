@@ -8,7 +8,7 @@ import { createFeedback } from '@/apis/feedback/feedback.apis';
 interface CreateFeedbackModalProps {
   isVisible: boolean;
   onClose: () => void;
-  onUploadComplete: (newImage: any) => void; // Cập nhật để không cần subCategoryName
+  onUploadComplete: (newImage: any) => void;
 }
 
 export default function CreateFeedbackModal({
@@ -21,6 +21,7 @@ export default function CreateFeedbackModal({
   const [subCategories, setSubCategories] = useState<ISubCategory[]>([]);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | undefined>();
   const [file, setFile] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchSubCategories = async () => {
@@ -40,6 +41,11 @@ export default function CreateFeedbackModal({
     const files = event.target.files;
     if (files && files.length > 0) {
       setFile(files[0]);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPreviewImage(reader.result as string);
+      };
+      reader.readAsDataURL(files[0]);
     }
   };
 
@@ -57,8 +63,8 @@ export default function CreateFeedbackModal({
 
     try {
       const result = await createFeedback(formData);
-      onUploadComplete(result.data); // Không cần truyền subCategoryName
       message.success('Thêm hình ảnh thành công!');
+      onUploadComplete(result.data);
       onClose();
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -100,6 +106,15 @@ export default function CreateFeedbackModal({
           onChange={handleFileChange} 
           style={{ marginTop: '10px' }} 
         />
+        {previewImage && (
+          <div style={{ maxHeight: '400px', overflowY: 'auto', marginTop: '10px' }}>
+            <img 
+              src={previewImage} 
+              alt="Preview" 
+              style={{ width: '100%', height: 'auto' }} 
+            />
+          </div>
+        )}
       </div>
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
         <Button 

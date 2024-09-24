@@ -26,34 +26,54 @@
 
 .card-title {
   margin: 0;
-  font-size: 1.2rem; // Giảm kích thước chữ
+  font-size: 1.2rem;
   font-weight: 600;
   color: #333;
-  text-align: left; // Căn trái
-  margin-top: 1rem; // Khoảng cách giữa hình ảnh và tiêu đề
-  overflow: hidden; // Ẩn overflow
-  text-overflow: ellipsis; // Hiển thị dấu ...
-  white-space: nowrap; // Không cho xuống dòng
+  text-align: left;
+  margin-top: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .card-description {
-  margin: 1rem 0 0; // Khoảng cách 1rem giữa tiêu đề và mô tả
+  margin: 1rem 0 0;
   font-size: 1rem;
   color: #666;
   line-height: 1.4;
-  overflow: hidden; // Ẩn overflow
-  text-overflow: ellipsis; // Hiển thị dấu ...
-  display: -webkit-box; // Hiển thị dưới dạng box
-  -webkit-line-clamp: 2; // Số dòng tối đa
-  -webkit-box-orient: vertical; // Hướng box
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .card-actions {
   display: flex;
-  justify-content: flex-end; // Căn phải
-  margin-top: 1rem; // Khoảng cách 1rem giữa mô tả và nút
+  justify-content: flex-end;
+  margin-top: 1rem;
 }
 
 .action-button {
-  margin-left: 1rem; // Khoảng cách giữa các nút
+  margin-left: 1rem;
+}
+
+.delete-button {
+  background-color: #ffcccc; // Nền màu đỏ nhạt
+  color: #c00; // Màu chữ
+  
+  &:hover {
+    background-color: #ff9999 !important; // Màu nền khi hover
+    color: #900 !important; // Màu chữ khi hover
+  }
+}
+
+.edit-button {
+  background-color: #ccffcc; // Nền màu xanh lá nhạt
+  color: #0c0; // Màu chữ
+  
+  &:hover {
+    background-color: #99ff99 !important; // Màu nền khi hover
+    color: #060 !important; // Màu chữ khi hover
+  }
 }

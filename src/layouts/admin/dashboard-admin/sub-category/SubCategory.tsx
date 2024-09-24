@@ -6,7 +6,8 @@ import { FaPlus, FaTrash } from 'react-icons/fa';
 import Link from 'next/link';
 import SubTable from "@/components/tables/table-subcategory/SubTable";
 import AddCategoryChild from "@/components/modals/AddCategoryChild"; 
-import { getAllSubCategories, createSubCategory, softRemoveSubCategory } from '@/apis/subCategory/subCategory.apis'; 
+import DeleteMultiChild from '@/components/modals/DeleteMultiChild'; // Import modal xóa nhiều
+import { getAllSubCategories, createSubCategory } from '@/apis/subCategory/subCategory.apis'; 
 import { getCategories } from '@/apis/category/category.apis'; 
 import { ISubCategory, ICategory } from "@/interfaces/models"; 
 import styled from 'styled-components'; 
@@ -42,6 +43,7 @@ export default function SubCategoryLayout() {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isAddModalVisible, setIsAddModalVisible] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
+  const [isMultiDeleteModalVisible, setIsMultiDeleteModalVisible] = useState(false); // State cho modal xóa nhiều
 
   const fetchData = async () => {
     try {
@@ -70,17 +72,13 @@ export default function SubCategoryLayout() {
     }
   };
 
-  const handleDeleteSelected = async () => {
-    try {
-      for (const id of selectedRowKeys) {
-        await softRemoveSubCategory(id as string); // Xóa mềm từng danh mục đã chọn
-      }
-      message.success('Danh mục con đã được xóa mềm.');
-      setSelectedRowKeys([]); // Reset lại selectedRowKeys
-      await fetchData(); // Gọi lại để lấy danh sách mới
-    } catch (error) {
-      message.error('Có lỗi xảy ra khi xóa danh mục con.');
-    }
+  const handleDeleteSelected = () => {
+    setIsMultiDeleteModalVisible(true); // Hiển thị modal xóa nhiều
+  };
+
+  const handleMultiDeleteConfirm = async () => {
+    setSelectedRowKeys([]); // Reset lại selectedRowKeys
+    await fetchData(); // Gọi lại để lấy danh sách mới sau khi xóa
   };
 
   const filteredSubCategories = subCategories.filter(subCategory =>
@@ -132,6 +130,13 @@ export default function SubCategoryLayout() {
         isVisible={isAddModalVisible}
         onClose={() => setIsAddModalVisible(false)}
         onAddCategory={handleAddSubCategory}
+      />
+      {/* Thêm modal DeleteMultiChild */}
+      <DeleteMultiChild
+        isVisible={isMultiDeleteModalVisible}
+        onClose={() => setIsMultiDeleteModalVisible(false)}
+        selectedKeys={selectedRowKeys as string[]}
+        onConfirm={handleMultiDeleteConfirm}
       />
     </div>
   );

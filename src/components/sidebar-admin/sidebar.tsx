@@ -69,7 +69,7 @@ export default function Sidebar({ onCollapseChange }: SidebarProps) {
                 Danh mục chính
               </Link>
               <Link href="/admin/sub-categories" className={`nav-hidden-link ${pathname === '/admin/sub-categories' ? 'active' : ''}`} onClick={closeNavHidden}>
-                Danh mục cấp 1
+                Danh mục phụ
               </Link>
             </div>
           </div>

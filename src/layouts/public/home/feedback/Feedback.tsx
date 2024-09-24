@@ -48,7 +48,7 @@ export function Category() {
         // Lấy danh sách danh mục con
         const subCategoriesData = await getAllSubCategories();
         const subCategoryMap = subCategoriesData.reduce((acc, subCat) => {
-          acc[subCat.id] = subCat.name; // Giả sử subCat có id và name
+          acc[subCat._id] = subCat.name; // Giả sử subCat có id và name
           return acc;
         }, {} as {[key: string]: string});
         setSubCategories(subCategoryMap);
@@ -60,10 +60,15 @@ export function Category() {
     fetchData();
   }, []);
 
-  const handleItemClick = async (item: string) => {
+  const handleItemClick = async (categoryName: string) => {
     try {
-      const feedbackItems = await getFeedbacks(item === 'Tất cả' ? undefined : item);
-      setFilteredProducts(feedbackItems);
+      const feedbackItems = await getFeedbacks();
+      // Lọc feedbackItems dựa trên categoryName
+      const filteredItems = categoryName === 'Tất cả'
+        ? feedbackItems
+        : feedbackItems.filter(item => item.category && item.category.name === categoryName); // Kiểm tra category có tồn tại
+
+      setFilteredProducts(filteredItems);
     } catch (error) {
       console.error('Error fetching feedbacks:', error);
     }
@@ -77,7 +82,7 @@ export function Category() {
           <CategoryItem
             key={product._id}
             name={product.nameFeedback} // Tên phản hồi
-            subCategory={subCategories[product.subCategoryID] || 'Chưa xác định'} // Hiển thị subCategory
+            subCategory={product.subCategory ? product.subCategory.name : 'Chưa xác định'} // Hiển thị subCategory
             image={product.url} // URL hình ảnh
             description={product.description} // Mô tả
           />

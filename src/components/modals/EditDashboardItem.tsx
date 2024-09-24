@@ -1,59 +1,67 @@
-'use client'
-import React, { useState, useEffect } from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Input, Select, message } from 'antd';
 import { IFeedBack, ISubCategory } from '@/interfaces/models';
-import { getFeedbacks, updateFeedback } from '@/apis/feedback/feedback.apis';
 import { getAllSubCategories } from '@/apis/subCategory/subCategory.apis';
+import { updateFeedback, getFeedbackById } from '@/apis/feedback/feedback.apis';
 
 interface EditDashboardItemProps {
   isVisible: boolean;
   onClose: () => void;
-  feedbackId: string | null;
-  onUpdateComplete: () => void;
+  itemId?: string; // Thay đổi để truyền ID của item cần chỉnh sửa
+  onUpdateComplete: (updatedItem: IFeedBack) => void;
 }
 
-const { Option } = Select;
-
-export default function EditDashboardItem({ isVisible, onClose, feedbackId, onUpdateComplete }: EditDashboardItemProps) {
+export default function EditDashboardItem({
+  isVisible,
+  onClose,
+  itemId,
+  onUpdateComplete,
+}: EditDashboardItemProps) {
   const [imgName, setImgName] = useState('');
   const [description, setDescription] = useState('');
-  const [subCategories, setSubCategories] = useState<ISubCategory[]>([]);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | undefined>();
-  const [file, setFile] = useState<File | null>(null);
+  const [subCategories, setSubCategories] = useState<ISubCategory[]>([]);
 
   useEffect(() => {
-    const fetchFeedback = async () => {
-      if (feedbackId) {
-        const feedbacks = await getFeedbacks();
-        const foundFeedback = feedbacks.find(fb => fb._id === feedbackId);
-        if (foundFeedback) {
-          setImgName(foundFeedback.nameFeedback);
-          setDescription(foundFeedback.description);
-          setSelectedSubCategory(foundFeedback.subCategoryID);
-        }
-      }
-    };
-
     const fetchSubCategories = async () => {
       try {
-        const subCategories = await getAllSubCategories();
-        setSubCategories(subCategories);
+        const fetchedSubCategories = await getAllSubCategories();
+        setSubCategories(fetchedSubCategories);
       } catch (error) {
         console.error('Error fetching sub-categories:', error);
         message.error('Có lỗi xảy ra khi lấy danh mục con.');
       }
     };
 
-    fetchFeedback();
     fetchSubCategories();
-  }, [feedbackId]);
+  }, []);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      setFile(files[0]);
-    }
-  };
+  useEffect(() => {
+    const fetchItemData = async () => {
+      if (itemId) {
+        try {
+          const result = await getFeedbackById(itemId);
+          
+          // Kiểm tra xem result.data có tồn tại không
+          if (result && result.data) {
+            setImgName(result.data.nameFeedback);
+            setDescription(result.data.description);
+            setSelectedSubCategory(result.data.subCategory ? result.data.subCategory._id : undefined);
+            
+            console.log('Item data being edited:', result.data); // Console log dữ liệu của item
+          } else {
+            message.error('Không tìm thấy dữ liệu cho phản hồi này.');
+          }
+        } catch (error) {
+          console.error('Error fetching feedback by ID:', error);
+          message.error('Có lỗi xảy ra khi lấy dữ liệu phản hồi.');
+        }
+      }
+    };
+
+    fetchItemData();
+  }, [itemId]);
 
   const handleSubmit = async () => {
     if (!imgName || !selectedSubCategory || !description) {
@@ -65,65 +73,61 @@ export default function EditDashboardItem({ isVisible, onClose, feedbackId, onUp
     formData.append('nameFeedback', imgName);
     formData.append('description', description);
     formData.append('subCategoryID', selectedSubCategory);
-    if (file) {
-      formData.append('images', file);
-    }
 
-    // Chuyển đổi formData thành một đối tượng thông thường để log
-    const dataToLog: any = {};
-    formData.forEach((value, key) => {
-      dataToLog[key] = value;
-    });
-    console.log('formData:', dataToLog);
+    // try {
+    //   const result = await updateFeedback(itemId!, formData); 
 
-    try {
-      await updateFeedback(feedbackId, formData);
-      message.success('Cập nhật thành công!');
-      onUpdateComplete();
-      onClose();
-    } catch (error) {
-      console.error('Error updating feedback:', error);
-      message.error('Có lỗi xảy ra khi cập nhật phản hồi.');
-    }
+    //   if (result && result.data) {
+    //     message.success('Cập nhật thành công!');
+    //     onUpdateComplete(result.data);
+    //     onClose();
+    //   } else {
+    //     message.error('Không có dữ liệu trả về.');
+    //   }
+    // } catch (error) {
+    //   console.error('Error updating feedback:', error);
+    //   message.error('Có lỗi xảy ra khi cập nhật.');
+    // }
   };
 
   return (
-    <Modal title="Sửa Phản Hồi" visible={isVisible} onCancel={onClose} footer={null}>
-      <Input
-        placeholder="Tên hình ảnh"
-        value={imgName}
-        onChange={(e) => setImgName(e.target.value)}
-      />
-      <Input.TextArea
-        placeholder="Mô tả hình ảnh"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-      />
-      <Select
-        placeholder="Chọn danh mục con"
-        style={{ width: '100%' }}
-        value={selectedSubCategory}
-        onChange={(value) => setSelectedSubCategory(value)}
-      >
-        {subCategories.length > 0 ? (
-          subCategories.map((subCategory) => (
-            <Option key={subCategory._id} value={subCategory._id}>
-              {subCategory.name}
-            </Option>
-          ))
-        ) : (
-          <Option disabled>Không có danh mục con nào</Option>
-        )}
-      </Select>
-      <input 
-        type="file" 
-        accept="image/*" 
-        onChange={handleFileChange} 
-        style={{ marginTop: '10px' }} 
-      />
-      <Button type="primary" onClick={handleSubmit} style={{ marginTop: '10px' }}>
-        Cập nhật
-      </Button>
+    <Modal title="Chỉnh sửa phản hồi" visible={isVisible} onCancel={onClose} footer={null}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <Input
+          placeholder="Tên hình ảnh"
+          value={imgName}
+          onChange={(e) => setImgName(e.target.value)}
+        />
+        <Input.TextArea
+          placeholder="Mô tả hình ảnh"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <Select
+          placeholder="Chọn danh mục con"
+          style={{ width: '100%' }}
+          value={selectedSubCategory}
+          onChange={(value) => setSelectedSubCategory(value)}
+        >
+          {subCategories.length > 0 ? (
+            subCategories.map((subCategory) => (
+              <Select.Option key={subCategory._id} value={subCategory._id}>
+                {subCategory.name}
+              </Select.Option>
+            ))
+          ) : (
+            <Select.Option disabled>Không có danh mục con nào</Select.Option>
+          )}
+        </Select>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
+        <Button 
+          type="primary" 
+          onClick={handleSubmit}
+        >
+          Sửa
+        </Button>
+      </div>
     </Modal>
   );
 }

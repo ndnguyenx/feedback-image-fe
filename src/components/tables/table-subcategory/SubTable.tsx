@@ -43,15 +43,13 @@ const SubTable: React.FC<ITableComponentProps> = ({
   const handleDeleteConfirm = async () => {
     if (deletingSubCategoryId) {
       try {
-        await softRemoveSubCategory(deletingSubCategoryId); // Gọi API để xóa mềm
-        message.success('Danh mục con đã được xóa mềm.'); // Hiển thị thông báo thành công
-        setDeleteModalVisible(false); // Đóng modal
-        setDeletingSubCategoryId(null); // Reset id
-        
-        // Gọi lại hàm lấy danh sách sub-categories
-        await onRefreshSubCategories();
+        await softRemoveSubCategory(deletingSubCategoryId);
+        message.success('Danh mục con đã được xóa mềm.');
+        setDeleteModalVisible(false);
+        setDeletingSubCategoryId(null);
+        await onRefreshSubCategories(); // Gọi lại hàm refresh
       } catch (error) {
-        message.error('Có lỗi xảy ra khi xóa danh mục con.'); 
+        message.error('Có lỗi xảy ra khi xóa danh mục con.');
       }
     }
   };
@@ -110,6 +108,7 @@ const SubTable: React.FC<ITableComponentProps> = ({
           subCategoryId={editingSubCategory._id}
           subCategoryName={editingSubCategory.name}
           cateId={editingSubCategory.categoryID}
+          onRefreshSubCategories={onRefreshSubCategories} // Truyền hàm refresh
         />
       )}
       <DeleteCategoryChild

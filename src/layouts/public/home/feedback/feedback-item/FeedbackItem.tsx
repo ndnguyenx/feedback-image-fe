@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { IoMdClose } from "react-icons/io";
+import LazyLoad from 'react-lazyload';
 
 const CategoryItemStyled = styled.div`
   position: relative;
@@ -132,7 +133,7 @@ const ModalImage = styled.img`
 
 interface IProps {
   name: string;
-  subCategory: string; // Thay đổi từ type sang subCategory
+  subCategory: string;
   image: string;
   description: string;
 }
@@ -146,11 +147,13 @@ function CategoryItem({ name, subCategory, image, description }: IProps) {
   return (
     <>
       <CategoryItemStyled onClick={openModal}>
-        <img className='item-img' src={image} alt={name} />
+        <LazyLoad height={200} offset={100}>
+          <img className='item-img' src={image} alt={name} />
+        </LazyLoad>
         <div className="overlay"></div>
         <div className='item-info'>
           <p>{name}</p>
-          <p>SubCategory: {subCategory}</p> {/* Thay đổi ở đây */}
+          <p>Dịch vụ: {subCategory}</p>
         </div>
       </CategoryItemStyled>
       {isModalOpen && (
@@ -165,7 +168,7 @@ function CategoryItem({ name, subCategory, image, description }: IProps) {
               <div className='modal-body-info'>
                 <h6>Thông tin chi tiết</h6>
                 <p>{name}</p>
-                <p>SubCategory: {subCategory}</p> {/* Thay đổi ở đây */}
+                <p>Dịch vụ: {subCategory}</p>
                 <p>{description}</p>
               </div>
             </div>

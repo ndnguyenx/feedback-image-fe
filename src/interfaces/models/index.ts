@@ -52,6 +52,11 @@ export interface IFeedBack extends IBaseModel {
   createdBy: IUser | Types.ObjectId;
   updatedBy: IUser | Types.ObjectId ;
   nameFeedback: string;
+  subCategory?: ISubCategory; // Thêm thuộc tính subCategory
+  category?: {
+    _id: string;
+    name: string;
+  };
 }
 
 export interface ICategory extends IBaseModel {

@@ -114,3 +114,18 @@ export async function getFeedbacks(queryParams?: any): Promise<IFeedBack[]> {
     throw error;
   }
 }
+
+export async function getFeedbackById(id: string): Promise<IBaseResponse<IFeedBack>> {
+  try {
+    const result = await api<IBaseResponse<IFeedBack>>({
+      url: `${API_URL}/${id}`, // Đảm bảo URL đúng
+      options: {
+        method: 'GET',
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error('Error fetching feedback by ID:', error);
+    throw error;
+  }
+}

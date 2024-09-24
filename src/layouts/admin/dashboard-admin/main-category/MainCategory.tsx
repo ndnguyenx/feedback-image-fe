@@ -5,8 +5,8 @@ import ButtonSimple from '@/components/buttons/ButtonSimple';
 import Link from 'next/link';
 import MainTable from '@/components/tables/table-maincategory/MainTable';
 import { FaPlus, FaTrash } from 'react-icons/fa';
-import AddCategoryParent from '@/components/modals/AddCategoryParent';
-import DeleteMultiParent from '@/components/modals/DeleteMultiParent'; // Import modal xóa nhiều mục
+import AddCategoryParent from '@/components/modals/Add/AddCategoryParent';
+import DeleteMultiParent from '@/components/modals/Delete/DeleteMultiParent'; // Import modal xóa nhiều mục
 import { createCategory, getCategories } from '@/apis/category/category.apis';
 import { ICategory } from '@/interfaces/models';
 import './style.scss';
@@ -41,11 +41,13 @@ export default function MainCategoryLayout() {
     }
   };
 
-  const handleDeleteCategories = async () => {
+  const handleDeleteCategories = () => {
     setIsMultiDeleteModalVisible(true); // Hiển thị modal xóa nhiều mục
   };
 
   const handleMultiDeleteConfirm = async (selectedKeys: React.Key[]) => {
+    // Thêm logic xóa nhiều mục ở đây nếu cần
+    // const updatedCategories = await deleteCategories(selectedKeys); // Gọi hàm xóa nếu có
     const updatedCategories = await getCategories(); // Lấy lại danh sách categories
     setCategories(updatedCategories);
     setSelectedRowKeys([]); // Xóa lựa chọn sau khi xóa
@@ -75,7 +77,7 @@ export default function MainCategoryLayout() {
           </div>
           {selectedRowKeys.length > 0 && (
             <div className="list-check">
-              <ButtonSimple className='multidel-btn' icon={FaTrash} onClick={handleDeleteCategories} />
+              <ButtonSimple className='multidel-btn' text='Xóa' icon={FaTrash} onClick={handleDeleteCategories} />
             </div>
           )}
         </Flex>
@@ -90,6 +92,7 @@ export default function MainCategoryLayout() {
             onRowSelectionChange={handleRowSelectionChange}
             categories={categories}
             onDeleteCategory={async (id: string) => {
+              // Nếu bạn muốn thực hiện hành động xóa ở đây, có thể thêm logic
               const updatedCategories = await getCategories();
               setCategories(updatedCategories);
             }}
@@ -109,7 +112,7 @@ export default function MainCategoryLayout() {
         isVisible={isMultiDeleteModalVisible}
         onClose={() => setIsMultiDeleteModalVisible(false)}
         onConfirm={handleMultiDeleteConfirm}
-        selectedKeys={selectedRowKeys}
+        selectedKeys={selectedRowKeys} 
       />
     </div>
   );

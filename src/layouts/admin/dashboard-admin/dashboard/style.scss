@@ -3,38 +3,46 @@
   padding: 2rem;
   background-color: var(--color-background-admin-page);
 
-  .add-feedback-container {
-    display: flex; // Đặt flex để căn chỉnh ngang
-    align-items: center; // Căn giữa theo chiều dọc
+  .btn-area {
+    margin-bottom: 1rem;
 
-    .add-feedback-button {
-      background-color: #4096ff; // Màu nền mới
-      color: white; // Màu chữ
-      border: none;
-      border-radius: 8px;
-      padding: 0.5rem 1rem; // Kích thước nút
-      font-size: 0.9rem; // Kích thước font
-      display: flex;
-      align-items: center;
+    .button-delete, .button-add {
+      max-width: fit-content;
+      margin-top: 3px;
 
-      &:hover {
-        background-color: #007acc; // Màu hover mới
-      }
+      button {
+        width: 50px; 
+        height: 40px; 
+        transition: 0.3s ease;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-      svg {
-        margin-right: 0.5rem;
+        svg {
+          font-size: 20px; 
+        }
       }
     }
 
     .trash-button {
-      margin-left: 2rem; // Cách nút "Thêm Phản Hồi" 2rem
-      font-size: 1.5rem; // Tăng kích thước icon
-      background: transparent; // Nền trong suốt
-      border: none; // Bỏ viền
-      color: inherit; // Giữ nguyên màu sắc
+      color: #000; 
+      border: 1px solid #000; 
+      margin-right: 1rem;
 
       &:hover {
-        color: #ff4d4f; // Màu khi hover
+        color: var(--color-white);
+        background-color: var(--color-xam);
+      }
+    }
+
+    .add-feedback-button {
+      color: var(--color-navbar);
+      border: 1px solid var(--color-navbar);
+
+      &:hover {
+        color: var(--color-white);
+        background-color: var(--color-navbar);
       }
     }
   }
@@ -44,8 +52,8 @@
     padding-left: 0;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 16px; // Khoảng cách giữa các card
-    justify-items: start; // Căn đều sang bên trái
+    gap: 16px; 
+    justify-items: start; 
   }
 }
 

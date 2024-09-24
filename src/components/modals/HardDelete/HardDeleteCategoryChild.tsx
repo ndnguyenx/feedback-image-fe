@@ -1,9 +1,9 @@
 'use client';
+
 import React from "react";
 import { Modal, message } from "antd";
 import styled from "styled-components";
-import { restoreCategory } from "@/apis/category/category.apis";
-import { ICategory } from "@/interfaces/models";
+import { DeleteSubCategory } from "@/apis/subCategory/subCategory.apis";
 
 const StyledModalContent = styled.div`
   .modal-body {
@@ -42,46 +42,52 @@ const StyledModalContent = styled.div`
   }
 `;
 
-interface RestoreCategoryProps {
+interface HardDeleteCategoryChildProps {
   isVisible: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  category: ICategory;
+  subCategoryId: string | null;
 }
 
-export default function RestoreCategory({
+export default function HardDeleteCategoryChild({
   isVisible,
   onClose,
   onConfirm,
-  category,
-}: RestoreCategoryProps) {
+  subCategoryId,
+}: HardDeleteCategoryChildProps) {
+  const handleCancel = () => {
+    onClose();
+  };
+
   const handleConfirm = async () => {
-    try {
-      await restoreCategory(category._id); // Gọi API để khôi phục danh mục
-      message.success("Danh mục đã được khôi phục.");
-      onConfirm(); // Cập nhật danh sách trong MainTrash
-    } catch (error) {
-      message.error('Có lỗi xảy ra khi khôi phục danh mục.');
+    if (subCategoryId) {
+      try {
+        await DeleteSubCategory(subCategoryId);
+        message.success("Danh mục con đã được xóa vĩnh viễn.");
+        onConfirm();
+      } catch {
+        message.error('Có lỗi xảy ra khi xóa danh mục con.');
+      }
     }
   };
 
   return (
     <Modal
-      title="Khôi Phục Danh Mục"
+      title="Xóa Vĩnh Viễn Danh Mục Con"
       open={isVisible}
-      onCancel={onClose}
+      onCancel={handleCancel}
       footer={null}
     >
       <StyledModalContent>
         <div className="modal-body">
-          <p>Bạn có chắc chắn muốn khôi phục danh mục này không?</p>
+          <p>Bạn có chắc chắn muốn xóa vĩnh viễn danh mục con này không?</p>
         </div>
         <div className="modal-footer">
-          <button className="btn-cancel" onClick={onClose}>
-            Hủy bỏ
-          </button>
           <button className="btn-sure" onClick={handleConfirm}>
-            Có, khôi phục
+            Có, chắc chắn
+          </button>
+          <button className="btn-cancel" onClick={handleCancel}>
+            Hủy bỏ
           </button>
         </div>
       </StyledModalContent>

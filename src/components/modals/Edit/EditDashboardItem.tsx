@@ -3,25 +3,27 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Button, Input, Select, message } from 'antd';
 import { ISubCategory } from '@/interfaces/models';
 import { getAllSubCategories } from '@/apis/subCategory/subCategory.apis';
-import { createFeedback } from '@/apis/feedback/feedback.apis';
+import { updateFeedback } from '@/apis/feedback/feedback.apis';
 
-interface CreateFeedbackModalProps {
+interface EditDashboardItemProps {
   isVisible: boolean;
   onClose: () => void;
-  onUploadComplete: (newImage: any) => void;
+  feedbackId: string | null;  
+  onUpdateComplete: () => void;
 }
 
-export default function CreateFeedbackModal({
+export default function EditDashboardItem({
   isVisible,
   onClose,
-  onUploadComplete,
-}: CreateFeedbackModalProps) {
+  feedbackId,
+  onUpdateComplete,
+}: EditDashboardItemProps) {
   const [imgName, setImgName] = useState('');
   const [description, setDescription] = useState('');
   const [subCategories, setSubCategories] = useState<ISubCategory[]>([]);
   const [selectedSubCategory, setSelectedSubCategory] = useState<string | undefined>();
   const [file, setFile] = useState<File | null>(null);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchSubCategories = async () => {
@@ -37,53 +39,85 @@ export default function CreateFeedbackModal({
     fetchSubCategories();
   }, []);
 
+  useEffect(() => {
+    if (feedbackId) { 
+      console.log('Feedback ID:', feedbackId);
+      const fetchFeedbackById = async () => {
+        try {
+          const response = await fetch(`http://localhost:3006/api/v1/feedback/${feedbackId}`);
+          const data = await response.json();
+          const feedback = data.data;
+          setImgName(feedback?.nameFeedback || '');
+          setDescription(feedback?.description || '');
+          setSelectedSubCategory(feedback?.subCategory?._id || undefined);
+          // Chúng ta không sử dụng previewImage, nên có thể bỏ nó đi
+          // setPreviewImage(feedback?.url || null);
+        } catch (error) {
+          console.error('Error fetching feedback:', error);
+          message.error('Có lỗi xảy ra khi tải thông tin phản hồi.');
+        }
+      };
+
+      fetchFeedbackById();
+    }
+  }, [feedbackId]);
+
+  // Xóa hàm handleFileChange nếu không cần thiết
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       setFile(files[0]);
       const reader = new FileReader();
       reader.onload = () => {
-        setPreviewImage(reader.result as string);
+        // Có thể bỏ biến previewImage
+        // setPreviewImage(reader.result as string);
       };
       reader.readAsDataURL(files[0]);
     }
   };
 
   const handleSubmit = async () => {
-    if (!imgName || !selectedSubCategory || !description || !file) {
-      message.error('Vui lòng điền đầy đủ thông tin và chọn hình ảnh.');
+    if (!imgName || !selectedSubCategory || !description) {
+      message.error('Vui lòng điền đầy đủ thông tin.');
       return;
     }
 
-    const formData = new FormData();
-    formData.append('nameFeedback', imgName);
-    formData.append('description', description);
-    formData.append('subCategoryID', selectedSubCategory);
-    formData.append('images', file);
+    if (!feedbackId) { 
+      message.error('Không thể cập nhật vì thiếu ID.');
+      return;
+    }
+    
+    const formData = {
+      nameFeedback: imgName, 
+      description: description, 
+      subCategoryID: selectedSubCategory,
+      images: file ? file : undefined
+    }
+
+    setLoading(true);
 
     try {
-      const result = await createFeedback(formData);
-      message.success('Thêm hình ảnh thành công!');
-      onUploadComplete(result.data);
-      resetFields(); // Reset fields and uploaded image after successful addition
+      const result = await updateFeedback(feedbackId, formData);
+      console.log("result:::", result); 
+      message.success('Cập nhật hình ảnh thành công!');
+      onUpdateComplete();
       onClose();
     } catch (error) {
-      console.error('Error uploading image:', error);
-      message.error('Có lỗi xảy ra khi thêm hình ảnh.');
+      console.error('Error updating feedback:', error);
+      message.error('Có lỗi xảy ra khi cập nhật hình ảnh.');
+    } finally {
+      setLoading(false);
     }
   };
 
-  // Reset fields function
-  const resetFields = () => {
-    setImgName('');
-    setDescription('');
-    setSelectedSubCategory(undefined);
-    setFile(null); // Reset file to null
-    setPreviewImage(null); // Reset preview image to null
-  };
-
   return (
-    <Modal title="Tạo phản hồi" visible={isVisible} onCancel={onClose} footer={null}>
+    <Modal
+      title="Chỉnh sửa phản hồi"
+      visible={isVisible}
+      onCancel={onClose}
+      footer={null}
+      confirmLoading={loading}
+    >
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         <Input
           placeholder="Tên hình ảnh"
@@ -98,6 +132,7 @@ export default function CreateFeedbackModal({
         <Select
           placeholder="Chọn danh mục con"
           style={{ width: '100%' }}
+          value={selectedSubCategory}
           onChange={(value) => setSelectedSubCategory(value)}
         >
           {subCategories.length > 0 ? (
@@ -110,28 +145,17 @@ export default function CreateFeedbackModal({
             <Select.Option disabled>Không có danh mục con nào</Select.Option>
           )}
         </Select>
+        
+        {/* Nút để tải lên hình ảnh */}
         <input 
           type="file" 
           accept="image/*" 
           onChange={handleFileChange} 
           style={{ marginTop: '10px' }} 
         />
-        {previewImage && (
-          <div style={{ maxHeight: '400px', overflowY: 'auto', marginTop: '10px' }}>
-            <img 
-              src={previewImage} 
-              alt="Preview" 
-              style={{ width: '100%', height: 'auto' }} 
-            />
-          </div>
-        )}
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1rem' }}>
-        <Button 
-          type="primary" 
-          onClick={handleSubmit}
-        >
-          Thêm
+
+        <Button type="primary" onClick={handleSubmit} loading={loading}>
+          Cập nhật
         </Button>
       </div>
     </Modal>

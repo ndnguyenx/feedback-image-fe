@@ -4,8 +4,8 @@ import { Table, Button, message } from 'antd';
 import styled from 'styled-components';
 import { ICategory } from '@/interfaces/models';
 import { getCategories, restoreCategory, DeleteCategory } from '@/apis/category/category.apis';
-import RestoreCategory from '@/components/modals/RestoreCategory';
-import HardDeleteCategory from '@/components/modals/HardDeleteCategory'; // Nhập HardDeleteCategory
+import RestoreCategory from '@/components/modals/Restore/RestoreCategory';
+import HardDeleteCategory from '@/components/modals/HardDelete/HardDeleteCategory'; // Nhập HardDeleteCategory
 
 const StyledTable = styled(Table)`
   width: 95%; /* Giảm độ rộng bảng */
@@ -26,18 +26,35 @@ const StyledTable = styled(Table)`
 `;
 
 const BackButton = styled(Button)`
-  margin-bottom: 1rem; /* Thêm margin-bottom cho nút quay lại */
+  margin-bottom: 1rem; 
+`;
+
+const DangerButton = styled(Button)`
+  color: red !important; 
+  border-color: red !important; 
+  background-color: rgba(255, 0, 0, 0.1) !important; 
+
+  &:hover {
+    background-color: rgba(255, 0, 0, 0.2) !important; 
+    border-color: red !important; 
+    color: red !important; 
+  }
+
+  &:focus {
+    color: red !important; 
+    border-color: red !important; 
+  }
 `;
 
 export default function MainTrash() {
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [restoreVisible, setRestoreVisible] = useState(false);
-  const [hardDeleteVisible, setHardDeleteVisible] = useState(false); // Thêm state cho HardDelete
+  const [hardDeleteVisible, setHardDeleteVisible] = useState(false); 
   const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(null);
 
   const fetchCategories = async () => {
     try {
-      const response = await getCategories({ limit: 20, page: 1, isDeleted: true });
+      const response = await getCategories({ limit: '20', page: '1', isDeleted: true });
       setCategories(response);
     } catch (error) {
       console.error('Error fetching categories:', error);
@@ -65,7 +82,7 @@ export default function MainTrash() {
         message.success("Danh mục đã được khôi phục.");
         fetchCategories(); // Cập nhật danh sách
         setRestoreVisible(false);
-      } catch (error) {
+      } catch {
         message.error("Có lỗi xảy ra khi khôi phục danh mục.");
       }
     }
@@ -78,7 +95,7 @@ export default function MainTrash() {
         message.success("Danh mục đã được xóa vĩnh viễn.");
         fetchCategories(); // Cập nhật danh sách
         setHardDeleteVisible(false);
-      } catch (error) {
+      } catch {
         message.error("Có lỗi xảy ra khi xóa danh mục.");
       }
     }
@@ -86,7 +103,7 @@ export default function MainTrash() {
 
   const columns = [
     {
-      title: 'STT',
+      title: 'Số thứ tự',
       render: (text: any, record: any, index: number) => index + 1,
     },
     { 
@@ -99,8 +116,10 @@ export default function MainTrash() {
       key: 'action',
       render: (text: any, record: any) => (
         <>
-          <Button onClick={() => handleRestore(record)}>Khôi phục</Button>
-          <Button onClick={() => handleHardDelete(record)} style={{ marginLeft: '1rem' }}>Xóa</Button> {/* Nút xóa vĩnh viễn */}
+          <Button type='primary' onClick={() => handleRestore(record)}>Khôi phục</Button>
+          <DangerButton onClick={() => handleHardDelete(record)} style={{ marginLeft: '1rem' }}>
+            Xóa
+          </DangerButton> 
         </>
       ),
     },

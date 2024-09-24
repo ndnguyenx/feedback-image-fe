@@ -55,7 +55,7 @@ const StyledModalContent = styled.div`
       padding: 0.5rem;
       border-radius: 6px;
       width: auto;
-      background-color: #8ca4ea;
+      background-color: #4d73df;
       color: var(--color-white);
       &:hover {
         opacity: 0.8;
@@ -109,9 +109,9 @@ export default function EditCategoryParent({
       }
       message.success("Danh mục đã được cập nhật thành công!");
       console.log(response);
-      onSuccess(); // Cập nhật danh sách khi cập nhật thành công
+      onSuccess(); 
       onClose();
-    } catch (error) {
+    } catch {
     }
   };
 

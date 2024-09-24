@@ -1,11 +1,12 @@
-'use client';
+'use client'
 import React, { useState, useEffect } from 'react';
+import { Flex } from 'antd';
 import { Button } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
-import CreateFeedbackModal from '@/components/modals/CreateFeedbackModal';
-import EditDashboardItem from '@/components/modals/EditDashboardItem';
+import CreateFeedbackModal from '@/components/modals/Add/CreateFeedbackModal';
+import EditDashboardItem from '@/components/modals/Edit/EditDashboardItem'; 
 import CardAdmin from '@/components/cards/Admin/CardAdmin';
-import DeleteDashboardItem from '@/components/modals/DeleteDashboardItem';
+import DeleteDashboardItem from '@/components/modals/Delete/DeleteDashboardItem';
 import { IFeedBack } from '@/interfaces/models';
 import './style.scss';
 
@@ -15,13 +16,14 @@ export default function DashboardLayout() {
   const [editModalVisible, setEditModalVisible] = useState(false); 
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [selectedFeedbackId, setSelectedFeedbackId] = useState<string | null>(null);
-  const [selectedFeedback, setSelectedFeedback] = useState<IFeedBack | null>(null);
+  const [selectedFeedback, setSelectedFeedback] = useState<IFeedBack | null>(null); 
 
   const fetchFeedbacks = async () => {
     try {
       const response = await fetch('http://localhost:3006/api/v1/feedback');
       const data = await response.json();
       setUploadedImages(data.data);
+      console.log(data);
     } catch (error) {
       console.error('Error fetching feedback:', error);
     }
@@ -40,8 +42,8 @@ export default function DashboardLayout() {
   };
 
   const handleOpenEditModal = (feedback: IFeedBack) => {
-    setSelectedFeedback(feedback);
-    setEditModalVisible(true);
+    setSelectedFeedback(feedback); 
+    setEditModalVisible(true); 
   };
 
   const handleCloseEditModal = () => {
@@ -50,6 +52,11 @@ export default function DashboardLayout() {
 
   const handleRefreshImages = (newImage: IFeedBack) => {
     setUploadedImages((prev) => [...prev, newImage]);
+  };
+
+  const handleUpdateComplete = () => {
+    setEditModalVisible(false);
+    fetchFeedbacks(); 
   };
 
   const handleDelete = (id: string) => {
@@ -64,17 +71,22 @@ export default function DashboardLayout() {
 
   return (
     <div className="dashboard-container">
-      <div className="add-feedback-container">
-        <Button className="add-feedback-button" onClick={handleOpenModal}>
-          <PlusOutlined /> Thêm ảnh
-        </Button>
-        <Button
-          className="trash-button"
-          onClick={() => window.location.href = '/admin/dashboard-trash'}
-        >
-          <DeleteOutlined />
-        </Button>
-      </div>
+      <Flex className='btn-area' justify="space-between" align="center">
+        <div className="button-delete">
+          <Button 
+            className="trash-button" 
+            onClick={() => window.location.href = '/admin/dashboard-trash'}
+            icon={<DeleteOutlined />}
+          />
+        </div>
+        <div className="button-add">
+          <Button 
+            className="add-feedback-button" 
+            onClick={handleOpenModal} 
+            icon={<PlusOutlined />} 
+          />
+        </div>
+      </Flex>
 
       <div className="content-item">
         {uploadedImages.map((image) => (
@@ -94,10 +106,10 @@ export default function DashboardLayout() {
       />
 
       <EditDashboardItem
-        isVisible={editModalVisible}
-        onClose={handleCloseEditModal}
+        isVisible={editModalVisible} 
+        onClose={handleCloseEditModal} 
         feedbackId={selectedFeedback?._id || null}
-        onUpdateComplete={fetchFeedbacks}
+        onUpdateComplete={handleUpdateComplete} 
       />
 
       <DeleteDashboardItem

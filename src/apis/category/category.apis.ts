@@ -1,8 +1,8 @@
 'use server';
 import { api } from '@/helpers/api.helper';
 import { IBaseResponse } from '@/interfaces/IBaseResponse.interfaces';
-import { ICategory } from '@/interfaces/models';
-import { Result } from 'postcss';
+import { ICategory, IQueries } from '@/interfaces/models';
+
 
 const API_URL = 'http://localhost:3006/api/v1/category';
 
@@ -82,7 +82,7 @@ export const updateCategory = async (id: string, name: {name: string}) => {
       url: `${API_URL}/${id}`, // Endpoint cho soft delete
       options: {
         method: 'PATCH', 
-        body: JSON.stringify( name ), // Gửi id, isDeleted và deletedAt
+        body: JSON.stringify( name ), 
       },
     });
     return result;
@@ -94,11 +94,16 @@ export const updateCategory = async (id: string, name: {name: string}) => {
 
 
 // Lấy danh sách các danh mục
-export async function getCategories(queryParams?: any): Promise<ICategory[]> {
+export async function getCategories(queryParams?: IQueries): Promise<ICategory[]> {
   try {
     const queryString = queryParams
-      ? `?${new URLSearchParams(queryParams).toString()}`
+      ? `?${new URLSearchParams({
+          limit: queryParams.limit,
+          page: queryParams.page,
+          isDeleted: queryParams.isDeleted ? 'true' : 'false', // Chuyển boolean sang string
+        }).toString()}`
       : '';
+
     const result = await api<IBaseResponse<ICategory[]>>({
       url: `${API_URL}${queryString}`,
       options: {
@@ -116,4 +121,5 @@ export async function getCategories(queryParams?: any): Promise<ICategory[]> {
     throw error;
   }
 }
+
 

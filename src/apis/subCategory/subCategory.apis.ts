@@ -1,7 +1,7 @@
 'use server';
 import { api } from '@/helpers/api.helper';
 import { IBaseResponse } from '@/interfaces/IBaseResponse.interfaces';
-import { ISubCategory } from '@/interfaces/models';
+import { IQueries, ISubCategory } from '@/interfaces/models';
 
 const API_URL = 'http://localhost:3006/api/v1/sub-category';
 
@@ -107,10 +107,14 @@ export async function updateSubCategory(id: string, payload: Partial<ISubCategor
 
 
 // Lấy tất cả danh mục con
-export async function getAllSubCategories(queryParams?: any): Promise<ISubCategory[]> {
+export async function getAllSubCategories(queryParams?: IQueries): Promise<ISubCategory[]> {
   try {
     const queryString = queryParams
-      ? `?${new URLSearchParams(queryParams).toString()}`
+      ? `?${new URLSearchParams({
+          limit: queryParams.limit,
+          page: queryParams.page,
+          isDeleted: queryParams.isDeleted ? 'true' : 'false', 
+        }).toString()}`
       : '';
     const result = await api<IBaseResponse<ISubCategory[]>>({
       url: `${API_URL}${queryString}`,

@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect } from "react";
 import { Modal, Form, Input, Button, message } from "antd";
 import { updateSubCategory } from "@/apis/subCategory/subCategory.apis";
@@ -6,10 +7,10 @@ import { ISubCategory } from "@/interfaces/models";
 interface EditCategoryChildProps {
   isVisible: boolean;
   onClose: () => void;
-  subCategoryId: string; // Chỉ nhận string
-  subCategoryName: string; // Chỉ nhận string
-  cateId?: string; // Có thể để là string hoặc undefined
-  onRefreshSubCategories: () => Promise<void>; // Thêm props
+  subCategoryId: string; 
+  subCategoryName: string; 
+  cateId?: string; 
+  onRefreshSubCategories: () => Promise<void>; 
 }
 
 const EditCategoryChild: React.FC<EditCategoryChildProps> = ({
@@ -33,11 +34,10 @@ const EditCategoryChild: React.FC<EditCategoryChildProps> = ({
       await updateSubCategory(subCategoryId, { ...values, categoryID: cateId });
       message.success("Danh mục con đã được cập nhật thành công!");
       form.resetFields();
-      await onRefreshSubCategories(); // Gọi lại hàm refresh
-      onClose(); // Đóng modal sau khi cập nhật thành công
-    } catch (error) {
+      await onRefreshSubCategories(); 
+      onClose();
+    } catch {
       message.error('Có lỗi xảy ra khi cập nhật danh mục con.');
-      console.error('Error updating category:', error);
     }
   };
 
@@ -46,7 +46,7 @@ const EditCategoryChild: React.FC<EditCategoryChildProps> = ({
       title="Sửa Danh Mục Con"
       visible={isVisible}
       onCancel={onClose}
-      footer={null}
+      footer={null} // Đặt footer là null để tùy chỉnh
     >
       <Form form={form} onFinish={handleEditCategory} layout="vertical">
         <Form.Item
@@ -56,7 +56,8 @@ const EditCategoryChild: React.FC<EditCategoryChildProps> = ({
         >
           <Input />
         </Form.Item>
-        <Form.Item>
+        
+        <Form.Item style={{ textAlign: 'right' }}>
           <Button type="primary" htmlType="submit">
             Cập Nhật
           </Button>

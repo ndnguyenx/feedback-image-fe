@@ -64,3 +64,9 @@ export interface ICategory extends IBaseModel {
   id: string;
   subCategoriesID: Array<string>;
 }
+
+export interface IQueries {
+  limit: string;
+  page: string;
+  isDeleted: boolean;
+}

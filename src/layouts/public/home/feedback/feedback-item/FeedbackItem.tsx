@@ -125,10 +125,12 @@ const ModalContent = styled.div`
 `;
 
 const ModalImage = styled.img`
-  max-height: 500px;
-  width: auto;
-  height: auto;
-  margin: 0 auto;
+  max-height: 500px; /* Giới hạn chiều cao tối đa */
+  max-width: 100%; /* Giới hạn chiều rộng tối đa */
+  width: auto; /* Đặt chiều rộng tự động */
+  height: auto; /* Đặt chiều cao tự động */
+  object-fit: contain; /* Giữ tỷ lệ hình ảnh mà không bị cắt xén */
+  margin: 0 auto; /* Căn giữa ảnh */
 `;
 
 interface IProps {

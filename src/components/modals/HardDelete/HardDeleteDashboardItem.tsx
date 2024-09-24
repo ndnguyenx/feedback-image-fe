@@ -19,9 +19,9 @@ const HardDeleteDashboardItem: React.FC<HardDeleteDashboardItemProps> = ({
   const handleHardDelete = async () => {
     if (feedbackId) {
       try {
-        await deleteFeedback(feedbackId); // Gọi API để xóa vĩnh viễn phản hồi
-        onHardDeleteComplete(); // Cập nhật danh sách sau khi xóa vĩnh viễn
-        onClose(); // Đóng modal
+        await deleteFeedback(feedbackId); 
+        onHardDeleteComplete(); 
+        onClose(); 
       } catch (error) {
         console.error('Error hard deleting feedback:', error);
       }
@@ -34,11 +34,11 @@ const HardDeleteDashboardItem: React.FC<HardDeleteDashboardItemProps> = ({
       visible={isVisible}
       onCancel={onClose}
       footer={[
-        <Button key="cancel" onClick={onClose}>
-          Hủy
-        </Button>,
         <Button key="delete" type="default" onClick={handleHardDelete}>
           Xóa Vĩnh Viễn
+        </Button>,
+        <Button key="cancel" onClick={onClose}>
+          Hủy
         </Button>,
       ]}
     >

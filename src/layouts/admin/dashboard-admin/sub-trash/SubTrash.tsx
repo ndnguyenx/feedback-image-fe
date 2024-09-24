@@ -1,15 +1,33 @@
-'use client';
+'use client'
 import React, { useState, useEffect } from 'react';
 import { Table, Button, message } from 'antd';
-import { ISubCategory, ICategory } from '@/interfaces/models'; // Import ICategory
+import styled from 'styled-components';
+import { ISubCategory, ICategory } from '@/interfaces/models'; 
 import { getAllSubCategories } from '@/apis/subCategory/subCategory.apis';
-import { getCategories } from '@/apis/category/category.apis'; // Import API để lấy danh mục cha
-import RestoreSubCategory from '@/components/modals/RestoreSubCategory';
-import HardDeleteCategoryChild from '@/components/modals/HardDeleteCategoryChild'; // Import modal xóa vĩnh viễn
+import { getCategories } from '@/apis/category/category.apis'; 
+import RestoreSubCategory from '@/components/modals/Restore/RestoreSubCategory';
+import HardDeleteCategoryChild from '@/components/modals/HardDelete/HardDeleteCategoryChild'; 
+
+const DangerButton = styled(Button)`
+  color: red !important; 
+  border-color: red !important; 
+  background-color: rgba(255, 0, 0, 0.1) !important; 
+
+  &:hover {
+    background-color: rgba(255, 0, 0, 0.2) !important; 
+    border-color: red !important; 
+    color: red !important; 
+  }
+
+  &:focus {
+    color: red !important; 
+    border-color: red !important; 
+  }
+`;
 
 const SubTrash: React.FC = () => {
   const [subCategories, setSubCategories] = useState<ISubCategory[]>([]);
-  const [categories, setCategories] = useState<ICategory[]>([]); // State để lưu danh mục cha
+  const [categories, setCategories] = useState<ICategory[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [restoreModalVisible, setRestoreModalVisible] = useState<boolean>(false);
   const [hardDeleteModalVisible, setHardDeleteModalVisible] = useState<boolean>(false);
@@ -17,15 +35,15 @@ const SubTrash: React.FC = () => {
 
   useEffect(() => {
     fetchSubCategories();
-    fetchCategories(); // Tải danh mục cha
+    fetchCategories(); 
   }, []);
 
   const fetchSubCategories = async () => {
     setLoading(true);
     try {
-      const response = await getAllSubCategories({ limit: 20, page: 1, isDeleted: true });
+      const response = await getAllSubCategories({ limit: '20', page: '1', isDeleted: true });
       setSubCategories(response);
-    } catch (error) {
+    } catch {
       message.error('Có lỗi xảy ra khi lấy danh sách danh mục con đã bị xóa.');
     } finally {
       setLoading(false);
@@ -34,9 +52,9 @@ const SubTrash: React.FC = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await getCategories(); // Gọi API lấy danh mục cha
+      const response = await getCategories();
       setCategories(response);
-    } catch (error) {
+    } catch {
       message.error('Có lỗi xảy ra khi lấy danh sách danh mục cha.');
     }
   };
@@ -53,18 +71,17 @@ const SubTrash: React.FC = () => {
 
   const handleRestore = async () => {
     setRestoreModalVisible(false);
-    fetchSubCategories(); // Cập nhật lại danh sách sau khi khôi phục
+    fetchSubCategories();
   };
 
   const handleHardDelete = async () => {
     setHardDeleteModalVisible(false);
-    fetchSubCategories(); // Cập nhật lại danh sách sau khi xóa
+    fetchSubCategories();
   };
 
-  // Hàm để lấy tên danh mục cha từ ID
   const getParentCategoryName = (categoryId: string) => {
     const category = categories.find(cat => cat._id === categoryId);
-    return category ? category.name : 'Không xác định'; // Trả về tên hoặc thông báo nếu không tìm thấy
+    return category ? category.name : 'Không xác định';
   };
 
   const columns = [
@@ -82,7 +99,7 @@ const SubTrash: React.FC = () => {
       title: 'Danh mục cha',
       dataIndex: 'categoryID',
       key: 'categoryID',
-      render: (categoryId: string) => getParentCategoryName(categoryId), // Hiển thị tên danh mục cha
+      render: (categoryId: string) => getParentCategoryName(categoryId),
     },
     {
       title: 'Hành động',
@@ -92,9 +109,9 @@ const SubTrash: React.FC = () => {
           <Button type="primary" onClick={() => showRestoreModal(record)}>
             Khôi phục
           </Button>
-          <Button onClick={() => showHardDeleteModal(record)} style={{ marginLeft: '1rem' }}>
+          <DangerButton onClick={() => showHardDeleteModal(record)} style={{ marginLeft: '1rem' }}>
             Xóa
-          </Button>
+          </DangerButton>
         </>
       ),
     },

@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import { Table, Button, message } from 'antd';
 import { ISubCategory, ICategory } from '@/interfaces/models';
-import EditCategoryChild from '@/components/modals/EditCategoryChild';
-import DeleteCategoryChild from '@/components/modals/DeleteCategoryChild';
-import AddCategoryChild from '@/components/modals/AddCategoryChild';
+import EditCategoryChild from '@/components/modals/Edit/EditCategoryChild';
+import DeleteCategoryChild from '@/components/modals/Delete/DeleteCategoryChild';
+import AddCategoryChild from '@/components/modals/Add/AddCategoryChild';
 import { softRemoveSubCategory } from '@/apis/subCategory/subCategory.apis';
 
 interface ITableComponentProps {
@@ -48,7 +48,7 @@ const SubTable: React.FC<ITableComponentProps> = ({
         setDeleteModalVisible(false);
         setDeletingSubCategoryId(null);
         await onRefreshSubCategories(); // Gọi lại hàm refresh
-      } catch (error) {
+      } catch {
         message.error('Có lỗi xảy ra khi xóa danh mục con.');
       }
     }
@@ -79,7 +79,7 @@ const SubTable: React.FC<ITableComponentProps> = ({
       key: 'action',
       render: (_: any, record: ISubCategory) => (
         <div>
-          <Button onClick={() => showEditModal(record)} style={{ marginRight: 8 }}>
+          <Button type='primary' onClick={() => showEditModal(record)} style={{ marginRight: 8 }}>
             Sửa
           </Button>
           <Button danger onClick={() => showDeleteModal(record._id)}>

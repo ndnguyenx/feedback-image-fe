@@ -43,8 +43,8 @@ const AddCategoryChild: React.FC<AddCategoryChildProps> = ({ isVisible, onClose,
       await onAddCategory(values);
       form.resetFields(); // Reset fields after adding
       message.success('Thêm danh mục con thành công.');
-      onClose(); // Close modal after successful addition
-    } catch (error) {
+      onClose();
+    } catch {
       message.error('Có lỗi xảy ra khi thêm danh mục con.');
     }
   };

@@ -1,7 +1,7 @@
 'use server';
 import { api } from '@/helpers/api.helper';
 import { IBaseResponse } from '@/interfaces/IBaseResponse.interfaces';
-import { IFeedBack } from '@/interfaces/models';
+import { IFeedBack, IQueries } from '@/interfaces/models';
 
 const API_URL = 'http://localhost:3006/api/v1/feedback';
 
@@ -92,10 +92,14 @@ export async function deleteFeedback(id: string) {
 }
 
 // Lấy danh sách các phản hồi
-export async function getFeedbacks(queryParams?: any): Promise<IFeedBack[]> {
+export async function getFeedbacks(queryParams?: IQueries): Promise<IFeedBack[]> {
   try {
     const queryString = queryParams
-      ? `?${new URLSearchParams(queryParams).toString()}`
+      ? `?${new URLSearchParams({
+          limit: queryParams.limit,
+          page: queryParams.page,
+          isDeleted: queryParams.isDeleted ? 'true' : 'false', 
+        }).toString()}`
       : '';
     const result = await api<IBaseResponse<IFeedBack[]>>({
       url: `${API_URL}${queryString}`,

@@ -5,8 +5,8 @@ import ButtonSimple from '@/components/buttons/ButtonSimple';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import Link from 'next/link';
 import SubTable from '@/components/tables/table-subcategory/SubTable';
-import AddCategoryChild from '@/components/modals/AddCategoryChild';
-import DeleteMultiChild from '@/components/modals/DeleteMultiChild';
+import AddCategoryChild from '@/components/modals/Add/AddCategoryChild';
+import DeleteMultiChild from '@/components/modals/Delete/DeleteMultiChild';
 import { getAllSubCategories, createSubCategory } from '@/apis/subCategory/subCategory.apis';
 import { getCategories } from '@/apis/category/category.apis';
 import { ISubCategory, ICategory } from '@/interfaces/models';
@@ -22,20 +22,20 @@ const StyledTrashIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
+  width: 50px;
   height: 40px;
-  border: 1px solid #ffcccc;
-  background-color: #ffe6e6;
+  border: 1px solid #000;
+  background-color: #fff;
   border-radius: 5px;
   cursor: pointer;
 
   &:hover {
-    background-color: #ffd4d4;
+    background-color: #fff;
   }
 
   svg {
-    color: #ff4d4d;
-    font-size: 1.5rem;
+    color: #000;
+    font-size: 20px;
   }
 `;
 
@@ -96,7 +96,6 @@ export default function SubCategoryLayout() {
 
   return (
     <div className="dashboard-container">
-      {/* Use StyledBtnArea to apply margin-bottom */}
       <StyledBtnArea justify="space-between" align="center">
         <Flex gap="small">
           <div className="button-delete">

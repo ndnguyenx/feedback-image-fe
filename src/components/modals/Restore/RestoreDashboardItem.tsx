@@ -1,7 +1,6 @@
 'use client';
 import React from 'react';
 import { Modal, Button } from 'antd';
-import { IFeedBack } from '@/interfaces/models';
 import { restoreFeedback } from '@/apis/feedback/feedback.apis';
 
 interface RestoreDashboardItemProps {

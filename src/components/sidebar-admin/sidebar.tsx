@@ -1,9 +1,8 @@
 'use client';
-
 import "./sidebar.scss";
 import Link from "next/link";
 import React, { useState } from "react";
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { FaImages } from "react-icons/fa6";
 import { AiOutlineBars } from "react-icons/ai";
 import { IoIosArrowForward, IoIosArrowBack, IoIosArrowDown } from "react-icons/io";

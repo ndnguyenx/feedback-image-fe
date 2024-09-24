@@ -1,6 +1,6 @@
 .card-container {
   width: 240px;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
@@ -68,12 +68,3 @@
   }
 }
 
-.edit-button {
-  background-color: #ccffcc; // Nền màu xanh lá nhạt
-  color: #0c0; // Màu chữ
-  
-  &:hover {
-    background-color: #99ff99 !important; // Màu nền khi hover
-    color: #060 !important; // Màu chữ khi hover
-  }
-}

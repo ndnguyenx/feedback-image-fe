@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { Table, Button, message, Input } from 'antd';
 import styled from 'styled-components';
 import { ICategory } from '@/interfaces/models';
-import EditCategoryParent from '@/components/modals/EditCategoryParent';
-import DeleteCategoryParent from '@/components/modals/DeleteCategory';
+import EditCategoryParent from '@/components/modals/Edit/EditCategoryParent';
+import DeleteCategoryParent from '@/components/modals/Delete/DeleteCategory';
 
 const StyledTable = styled(Table)`
   .ant-table-thead > tr > th {
@@ -83,7 +83,7 @@ export default function MainTable({
         await onDeleteCategory(selectedCategory.id);
         message.success('Danh mục đã được xóa mềm.');
         handleDeleteClose();
-      } catch (error) {
+      } catch {
         message.error('Có lỗi xảy ra khi xóa danh mục.');
       }
     }
@@ -104,7 +104,7 @@ export default function MainTable({
       key: 'action',
       render: (text: any, record: any) => (
         <span>
-          <ActionButton onClick={() => handleEdit(record._id, record.name)}>Sửa</ActionButton>
+          <ActionButton type='primary' onClick={() => handleEdit(record._id, record.name)}>Sửa</ActionButton>
           <ActionButton danger onClick={() => handleDelete(record._id)}>
             Xóa
           </ActionButton>

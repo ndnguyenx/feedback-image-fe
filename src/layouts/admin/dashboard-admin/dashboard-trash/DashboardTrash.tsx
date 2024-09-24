@@ -2,8 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { IFeedBack } from '@/interfaces/models';
 import CardAdminTrash from '@/components/cards/Admin/CardAdminTrash';
-import RestoreDashboardItem from '@/components/modals/RestoreDashboardItem';
-import HardDeleteDashboardItem from '@/components/modals/HardDeleteDashboardItem'; // Import modal xóa vĩnh viễn
+import RestoreDashboardItem from '@/components/modals/Restore/RestoreDashboardItem';
+import HardDeleteDashboardItem from '@/components/modals/HardDelete/HardDeleteDashboardItem'; // Import modal xóa vĩnh viễn
 import './style.scss';
 
 export default function DashboardTrash() {

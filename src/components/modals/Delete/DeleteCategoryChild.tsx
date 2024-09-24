@@ -65,7 +65,7 @@ export default function DeleteCategoryChild({
         await softRemoveSubCategory(subCategoryId);
         message.success("Danh mục con đã được xóa mềm.");
         onConfirm();
-      } catch (error) {
+      } catch {
         message.error('Có lỗi xảy ra khi xóa danh mục con.');
       }
     }

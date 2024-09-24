@@ -11,7 +11,6 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { logout } from "@/apis/auth/auth.apis";
 
-
 export default function Navbar() {
   const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,9 +35,6 @@ export default function Navbar() {
       label: <span onClick={handlerLogout}>Đăng xuất</span>,
       icon: <IoIosLogOut />,
     },
-    {
-      type: "divider",
-    },
   ];
 
   return (
@@ -54,7 +50,12 @@ export default function Navbar() {
           open={isMenuOpen}
           onOpenChange={toggleMenu}
         >
-          <Avatar size={40} icon={<UserOutlined />} className="navbar-avatar" />
+          <Avatar 
+            size={40} 
+            src="https://avatar.iran.liara.run/public" 
+            className="navbar-avatar" 
+            icon={<UserOutlined />} 
+          />
         </Dropdown>
       </div>
     </nav>

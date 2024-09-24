@@ -36,9 +36,6 @@ export default function Navbar() {
       label: <span onClick={handlerLogout}>Đăng xuất</span>,
       icon: <IoIosLogOut />,
     },
-    {
-      type: "divider",
-    },
   ];
 
   return (

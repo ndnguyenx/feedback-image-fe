@@ -18,7 +18,7 @@ const StyledModalContent = styled.div`
 
         &-title {
           width: 30%;
-          padding: 0.5rem;
+          padding: 0.5rem 0;
           text-align: center;
           background-color: #eaecf4;
         }

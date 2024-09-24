@@ -101,9 +101,7 @@ export default function SubCategoryLayout() {
         <Flex gap="small">
           <div className="button-delete">
             <Link href="/admin/sub-trash">
-              <StyledTrashIcon>
-                <FaTrash />
-              </StyledTrashIcon>
+              <ButtonSimple className='trash-icon' icon={FaTrash} />
             </Link>
           </div>
           {selectedRowKeys.length > 0 && (

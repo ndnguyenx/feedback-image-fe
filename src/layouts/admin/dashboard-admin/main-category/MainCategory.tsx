@@ -74,8 +74,8 @@ export default function MainCategoryLayout() {
             </Link>
           </div>
           {selectedRowKeys.length > 0 && (
-            <div className="list-check">
-              <ButtonSimple className='multidel-btn' icon={FaTrash} onClick={handleDeleteCategories} />
+            <div className="list-check"> 
+              <ButtonSimple text="Xóa" icon={FaTrash} onClick={handleDeleteCategories} />
             </div>
           )}
         </Flex>

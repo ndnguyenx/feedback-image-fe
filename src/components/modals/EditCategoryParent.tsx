@@ -6,7 +6,7 @@ import { updateCategory } from "@/apis/category/category.apis"; // Import hàm u
 const StyledModalContent = styled.div`
   .modal-body {
     padding: 1rem;
-    margin: 1rem auto;
+    margin: 1rem auto 0;
 
     .input-group {
       position: relative;
@@ -18,7 +18,7 @@ const StyledModalContent = styled.div`
 
       &-title {
         width: 30%;
-        padding: 0.5rem;
+        padding: 0.5rem 0;
         text-align: center;
         background-color: #eaecf4;
       }
@@ -36,7 +36,7 @@ const StyledModalContent = styled.div`
   .modal-footer {
     display: flex;
     justify-content: flex-end;
-    padding: 1rem;
+    padding: 0.5rem 1rem;
     border-top: 1px solid #e9ecef;
     gap: 1rem;
 

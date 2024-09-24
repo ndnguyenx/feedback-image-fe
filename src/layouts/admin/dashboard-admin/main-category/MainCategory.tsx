@@ -9,6 +9,7 @@ import AddCategoryParent from '@/components/modals/AddCategoryParent';
 import DeleteMultiParent from '@/components/modals/DeleteMultiParent'; // Import modal xóa nhiều mục
 import { createCategory, getCategories } from '@/apis/category/category.apis';
 import { ICategory } from '@/interfaces/models';
+import './style.scss';
 
 export default function MainCategoryLayout() {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -65,16 +66,16 @@ export default function MainCategoryLayout() {
 
   return (
     <div className="dashboard-container">
-      <Flex justify="space-between" align="center">
+      <Flex className='btn-area' justify="space-between" align="center">
         <Flex gap="small">
           <div className="button-delete">
             <Link href="/admin/main-trash">
-              <ButtonSimple icon={FaTrash} />
+              <ButtonSimple className='trash-icon' icon={FaTrash} />
             </Link>
           </div>
           {selectedRowKeys.length > 0 && (
             <div className="list-check">
-              <ButtonSimple text="Xóa" icon={FaTrash} onClick={handleDeleteCategories} />
+              <ButtonSimple className='multidel-btn' icon={FaTrash} onClick={handleDeleteCategories} />
             </div>
           )}
         </Flex>
@@ -92,8 +93,9 @@ export default function MainCategoryLayout() {
               const updatedCategories = await getCategories();
               setCategories(updatedCategories);
             }}
-            onEditCategory={async (id: string, name: string) => {
-              // Thêm logic chỉnh sửa nếu cần
+            onEditCategory={async () => {
+              const fetchedCategories = await getCategories();
+              setCategories(fetchedCategories);
             }}
           />
         </div>

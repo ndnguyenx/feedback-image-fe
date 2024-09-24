@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Input, Button, Select, message } from 'antd';
+import styled from 'styled-components'; // Import styled-components
 import { ISubCategory, ICategory } from '@/interfaces/models';
 import { getCategories } from '@/apis/category/category.apis';
 
@@ -8,6 +9,12 @@ interface AddCategoryChildProps {
   onClose: () => void;
   onAddCategory: (subCategoryData: Partial<ISubCategory>) => Promise<void>;
 }
+
+const StyledModalFooter = styled.div`
+  display: flex;
+  justify-content: flex-end; // Căn phải
+  gap: 1rem; // Khoảng cách giữa các nút
+`;
 
 const AddCategoryChild: React.FC<AddCategoryChildProps> = ({ isVisible, onClose, onAddCategory }) => {
   const [form] = Form.useForm();
@@ -71,8 +78,10 @@ const AddCategoryChild: React.FC<AddCategoryChildProps> = ({ isVisible, onClose,
           <Input />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">Thêm</Button>
-          <Button type="default" onClick={onClose}>Hủy</Button>
+          <StyledModalFooter>
+            <Button type="default" onClick={onClose}>Hủy</Button>
+            <Button type="primary" htmlType="submit">Thêm</Button>
+          </StyledModalFooter>
         </Form.Item>
       </Form>
     </Modal>

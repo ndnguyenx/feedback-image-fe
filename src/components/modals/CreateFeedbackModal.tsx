@@ -65,11 +65,21 @@ export default function CreateFeedbackModal({
       const result = await createFeedback(formData);
       message.success('Thêm hình ảnh thành công!');
       onUploadComplete(result.data);
+      resetFields(); // Reset fields and uploaded image after successful addition
       onClose();
     } catch (error) {
       console.error('Error uploading image:', error);
       message.error('Có lỗi xảy ra khi thêm hình ảnh.');
     }
+  };
+
+  // Reset fields function
+  const resetFields = () => {
+    setImgName('');
+    setDescription('');
+    setSelectedSubCategory(undefined);
+    setFile(null); // Reset file to null
+    setPreviewImage(null); // Reset preview image to null
   };
 
   return (

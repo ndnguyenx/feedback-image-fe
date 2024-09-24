@@ -1,13 +1,15 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { Table, Button, message } from 'antd';
-import { ISubCategory } from '@/interfaces/models';
+import { ISubCategory, ICategory } from '@/interfaces/models'; // Import ICategory
 import { getAllSubCategories } from '@/apis/subCategory/subCategory.apis';
+import { getCategories } from '@/apis/category/category.apis'; // Import API để lấy danh mục cha
 import RestoreSubCategory from '@/components/modals/RestoreSubCategory';
 import HardDeleteCategoryChild from '@/components/modals/HardDeleteCategoryChild'; // Import modal xóa vĩnh viễn
 
 const SubTrash: React.FC = () => {
   const [subCategories, setSubCategories] = useState<ISubCategory[]>([]);
+  const [categories, setCategories] = useState<ICategory[]>([]); // State để lưu danh mục cha
   const [loading, setLoading] = useState<boolean>(false);
   const [restoreModalVisible, setRestoreModalVisible] = useState<boolean>(false);
   const [hardDeleteModalVisible, setHardDeleteModalVisible] = useState<boolean>(false);
@@ -15,6 +17,7 @@ const SubTrash: React.FC = () => {
 
   useEffect(() => {
     fetchSubCategories();
+    fetchCategories(); // Tải danh mục cha
   }, []);
 
   const fetchSubCategories = async () => {
@@ -26,6 +29,15 @@ const SubTrash: React.FC = () => {
       message.error('Có lỗi xảy ra khi lấy danh sách danh mục con đã bị xóa.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await getCategories(); // Gọi API lấy danh mục cha
+      setCategories(response);
+    } catch (error) {
+      message.error('Có lỗi xảy ra khi lấy danh sách danh mục cha.');
     }
   };
 
@@ -49,6 +61,12 @@ const SubTrash: React.FC = () => {
     fetchSubCategories(); // Cập nhật lại danh sách sau khi xóa
   };
 
+  // Hàm để lấy tên danh mục cha từ ID
+  const getParentCategoryName = (categoryId: string) => {
+    const category = categories.find(cat => cat._id === categoryId);
+    return category ? category.name : 'Không xác định'; // Trả về tên hoặc thông báo nếu không tìm thấy
+  };
+
   const columns = [
     {
       title: 'Số thứ tự',
@@ -61,9 +79,10 @@ const SubTrash: React.FC = () => {
       key: 'name',
     },
     {
-      title: 'ID danh mục cha',
+      title: 'Danh mục cha',
       dataIndex: 'categoryID',
       key: 'categoryID',
+      render: (categoryId: string) => getParentCategoryName(categoryId), // Hiển thị tên danh mục cha
     },
     {
       title: 'Hành động',
@@ -73,7 +92,7 @@ const SubTrash: React.FC = () => {
           <Button type="primary" onClick={() => showRestoreModal(record)}>
             Khôi phục
           </Button>
-          <Button  onClick={() => showHardDeleteModal(record)} style={{ marginLeft: '1rem' }}>
+          <Button onClick={() => showHardDeleteModal(record)} style={{ marginLeft: '1rem' }}>
             Xóa
           </Button>
         </>

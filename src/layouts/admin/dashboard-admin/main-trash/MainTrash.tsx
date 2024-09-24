@@ -8,9 +8,12 @@ import RestoreCategory from '@/components/modals/RestoreCategory';
 import HardDeleteCategory from '@/components/modals/HardDeleteCategory'; // Nhập HardDeleteCategory
 
 const StyledTable = styled(Table)`
+  width: 95%; /* Giảm độ rộng bảng */
+  margin: 0 auto; /* Căn giữa bảng */
+
   .ant-table-thead > tr > th {
-    background-color: var(--color-primary);
-    color: var(--color-white);
+    background-color: #4e73df; /* Thay màu thành #4e73df */
+    color: white; /* Màu chữ */
   }
 
   .ant-table-tbody > tr:nth-child(odd) {
@@ -20,6 +23,10 @@ const StyledTable = styled(Table)`
   .ant-table-tbody > tr > td {
     padding: 0.5rem;
   }
+`;
+
+const BackButton = styled(Button)`
+  margin-bottom: 1rem; /* Thêm margin-bottom cho nút quay lại */
 `;
 
 export default function MainTrash() {
@@ -101,7 +108,7 @@ export default function MainTrash() {
 
   return (
     <>
-      <Button onClick={() => window.history.back()}>Quay lại</Button>
+      <BackButton onClick={() => window.history.back()}>Quay lại</BackButton>
       <StyledTable
         dataSource={categories}
         columns={columns}

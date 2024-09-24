@@ -8,8 +8,8 @@
     align-items: center; // Căn giữa theo chiều dọc
 
     .add-feedback-button {
-      background-color: #4caf50;
-      color: white;
+      background-color: #4096ff; // Màu nền mới
+      color: white; // Màu chữ
       border: none;
       border-radius: 8px;
       padding: 0.5rem 1rem; // Kích thước nút
@@ -18,7 +18,7 @@
       align-items: center;
 
       &:hover {
-        background-color: #45a049; 
+        background-color: #007acc; // Màu hover mới
       }
 
       svg {
@@ -41,9 +41,11 @@
 
   .content-item {
     padding: 2rem;
+    padding-left: 0;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 16px; // Khoảng cách giữa các card
+    justify-items: start; // Căn đều sang bên trái
   }
 }
 

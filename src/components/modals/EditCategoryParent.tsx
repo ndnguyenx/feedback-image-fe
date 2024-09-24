@@ -69,6 +69,7 @@ interface EditCategoryParentProps {
   onClose: () => void;
   categoryId: string;
   categoryName: string;
+  onSuccess: () => void;
 }
 
 export default function EditCategoryParent({
@@ -76,6 +77,7 @@ export default function EditCategoryParent({
   onClose,
   categoryId,
   categoryName,
+  onSuccess,
 }: EditCategoryParentProps) {
   const [name, setName] = useState(categoryName);
 
@@ -101,8 +103,13 @@ export default function EditCategoryParent({
 
     try {
       const response = await updateCategory(categoryId, {name: name}); // Gọi hàm updateCategory
+      if (response.statusCode !== 200) {
+        message.error("Có lỗi xảy ra khi cập nhật danh mục");
+        return;
+      }
       message.success("Danh mục đã được cập nhật thành công!");
       console.log(response);
+      onSuccess(); // Cập nhật danh sách khi cập nhật thành công
       onClose();
     } catch (error) {
     }

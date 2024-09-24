@@ -160,7 +160,7 @@ function CategoryItem({ name, subCategory, image, description }: IProps) {
         <ModalWrapper onClick={closeModal}>
           <ModalContent onClick={(e) => e.stopPropagation()}>
             <div className='modal-header'>
-              <h6 className='modal-header-title'>CHI TIẾT PHẢN HỒI</h6>
+              <h6 className='modal-header-title'>Chi tiết Feedback</h6>
               <IoMdClose className='modal-close' onClick={closeModal} />
             </div>
             <div className='modal-body'>

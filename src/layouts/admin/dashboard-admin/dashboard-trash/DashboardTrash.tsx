@@ -50,7 +50,7 @@ export default function DashboardTrash() {
 
   return (
     <div className="dashboard-trash-container">
-      <h2>Thùng Rác</h2>
+      <h3>Hình ảnh đã xóa</h3>
       <button className="back-button" onClick={handleBack}>
         Quay lại
       </button>

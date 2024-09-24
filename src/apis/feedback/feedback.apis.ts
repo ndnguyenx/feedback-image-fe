@@ -118,7 +118,7 @@ export async function getFeedbacks(queryParams?: any): Promise<IFeedBack[]> {
 export async function getFeedbackById(id: string): Promise<IBaseResponse<IFeedBack>> {
   try {
     const result = await api<IBaseResponse<IFeedBack>>({
-      url: `${API_URL}/${id}`, // Đảm bảo URL đúng
+      url: `${API_URL}/${id}`, 
       options: {
         method: 'GET',
       },

@@ -83,11 +83,11 @@ export default function DeleteCategoryChild({
           <p>Bạn có chắc chắn muốn xóa danh mục con này không?</p>
         </div>
         <div className="modal-footer">
-          <button className="btn-cancel" onClick={handleCancel}>
-            Hủy bỏ
-          </button>
           <button className="btn-sure" onClick={handleConfirm}>
             Có, chắc chắn
+          </button>
+          <button className="btn-cancel" onClick={handleCancel}>
+            Hủy bỏ
           </button>
         </div>
       </StyledModalContent>

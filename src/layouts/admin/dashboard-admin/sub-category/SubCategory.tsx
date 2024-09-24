@@ -1,40 +1,48 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { Flex, Input, message } from 'antd';
+import { Flex, Input } from 'antd';
 import ButtonSimple from '@/components/buttons/ButtonSimple';
 import { FaPlus, FaTrash } from 'react-icons/fa';
 import Link from 'next/link';
-import SubTable from "@/components/tables/table-subcategory/SubTable";
-import AddCategoryChild from "@/components/modals/AddCategoryChild"; 
-import DeleteMultiChild from '@/components/modals/DeleteMultiChild'; // Import modal xóa nhiều
-import { getAllSubCategories, createSubCategory } from '@/apis/subCategory/subCategory.apis'; 
-import { getCategories } from '@/apis/category/category.apis'; 
-import { ISubCategory, ICategory } from "@/interfaces/models"; 
-import styled from 'styled-components'; 
+import SubTable from '@/components/tables/table-subcategory/SubTable';
+import AddCategoryChild from '@/components/modals/AddCategoryChild';
+import DeleteMultiChild from '@/components/modals/DeleteMultiChild';
+import { getAllSubCategories, createSubCategory } from '@/apis/subCategory/subCategory.apis';
+import { getCategories } from '@/apis/category/category.apis';
+import { ISubCategory, ICategory } from '@/interfaces/models';
+import styled from 'styled-components';
 
+// Styled component for btn-area with margin-bottom 1rem
+const StyledBtnArea = styled(Flex)`
+  margin-bottom: 1rem; // Add margin-bottom 1rem
+`;
+
+// Styled component for trash icon button
 const StyledTrashIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px; /* Chiều rộng của icon */
-  height: 40px; /* Chiều cao của icon */
-  border: 1px solid #ffcccc; /* Border 1px */
-  background-color: #ffe6e6; /* Nền đỏ nhạt */
-  border-radius: 5px; /* Đường viền bo góc */
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ffcccc;
+  background-color: #ffe6e6;
+  border-radius: 5px;
   cursor: pointer;
 
   &:hover {
-    background-color: #ffd4d4; /* Nền khi hover */
+    background-color: #ffd4d4;
   }
 
   svg {
-    color: #ff4d4d; /* Màu đỏ đậm cho icon */
-    font-size: 1.5rem; /* Kích thước của icon */
+    color: #ff4d4d;
+    font-size: 1.5rem;
   }
 `;
 
+// Styled component for search input
 const StyledSearchInput = styled(Input)`
-  width: 200px; /* Đặt chiều rộng nhỏ lại */
+  width: 200px;
+  margin-left: 1rem;
 `;
 
 export default function SubCategoryLayout() {
@@ -43,8 +51,9 @@ export default function SubCategoryLayout() {
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isAddModalVisible, setIsAddModalVisible] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [isMultiDeleteModalVisible, setIsMultiDeleteModalVisible] = useState(false); // State cho modal xóa nhiều
+  const [isMultiDeleteModalVisible, setIsMultiDeleteModalVisible] = useState(false); // State for multi-delete modal
 
+  // Fetch subcategories and parent categories
   const fetchData = async () => {
     try {
       const [fetchedSubCategories, fetchedParentCategories] = await Promise.all([
@@ -65,7 +74,7 @@ export default function SubCategoryLayout() {
   const handleAddSubCategory = async (subCategoryData: Partial<ISubCategory>) => {
     try {
       const newSubCategory = await createSubCategory(subCategoryData);
-      setSubCategories(prev => [...prev, newSubCategory]);
+      setSubCategories((prev) => [...prev, newSubCategory]);
       setIsAddModalVisible(false);
     } catch (error) {
       console.error('Error adding sub-category:', error);
@@ -73,21 +82,22 @@ export default function SubCategoryLayout() {
   };
 
   const handleDeleteSelected = () => {
-    setIsMultiDeleteModalVisible(true); // Hiển thị modal xóa nhiều
+    setIsMultiDeleteModalVisible(true); // Show multi-delete modal
   };
 
   const handleMultiDeleteConfirm = async () => {
-    setSelectedRowKeys([]); // Reset lại selectedRowKeys
-    await fetchData(); // Gọi lại để lấy danh sách mới sau khi xóa
+    setSelectedRowKeys([]); // Reset selected row keys
+    await fetchData(); // Fetch new data after deletion
   };
 
-  const filteredSubCategories = subCategories.filter(subCategory =>
+  const filteredSubCategories = subCategories.filter((subCategory) =>
     subCategory.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="dashboard-container">
-      <Flex justify="space-between" align="center">
+      {/* Use StyledBtnArea to apply margin-bottom */}
+      <StyledBtnArea justify="space-between" align="center">
         <Flex gap="small">
           <div className="button-delete">
             <Link href="/admin/sub-trash">
@@ -105,7 +115,8 @@ export default function SubCategoryLayout() {
         <div className="button-add">
           <ButtonSimple icon={FaPlus} onClick={() => setIsAddModalVisible(true)} />
         </div>
-      </Flex>
+      </StyledBtnArea>
+
       <div className="dashboard-search">
         <label htmlFor="search" className="dashboard-search-label">Tìm Kiếm:</label>
         <StyledSearchInput
@@ -116,22 +127,24 @@ export default function SubCategoryLayout() {
           className="dashboard-search-input"
         />
       </div>
-      <div style={{ marginTop: '1rem' }} className="dashboard-table"> {/* Cách table 1rem */}
+
+      <div style={{ marginTop: '1rem' }} className="dashboard-table">
         <SubTable
           subCategories={filteredSubCategories}
           parentCategories={parentCategories}
           selectedRowKeys={selectedRowKeys}
           onRowSelectionChange={setSelectedRowKeys}
           onAddCategory={handleAddSubCategory}
-          onRefreshSubCategories={fetchData} // Truyền hàm refresh vào SubTable
+          onRefreshSubCategories={fetchData} // Pass refresh function to SubTable
         />
       </div>
+
       <AddCategoryChild
         isVisible={isAddModalVisible}
         onClose={() => setIsAddModalVisible(false)}
         onAddCategory={handleAddSubCategory}
       />
-      {/* Thêm modal DeleteMultiChild */}
+
       <DeleteMultiChild
         isVisible={isMultiDeleteModalVisible}
         onClose={() => setIsMultiDeleteModalVisible(false)}

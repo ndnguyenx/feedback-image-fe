@@ -42,7 +42,7 @@ interface MainTableProps {
   onRowSelectionChange: (newSelectedRowKeys: React.Key[]) => void;
   categories: ICategory[];
   onDeleteCategory: (id: string) => Promise<void>;
-  onEditCategory: (id: string, name: string) => Promise<void>;
+  onEditCategory: () => Promise<void>;
 }
 
 export default function MainTable({
@@ -140,6 +140,7 @@ export default function MainTable({
           onClose={handleEditClose}
           categoryId={selectedCategory.id}
           categoryName={selectedCategory.name}
+          onSuccess={() =>onEditCategory()}
         />
       )}
       {selectedCategory && (

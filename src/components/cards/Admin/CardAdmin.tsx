@@ -4,21 +4,21 @@ import { IFeedBack } from '@/interfaces/models';
 import './style.scss';
 
 interface CardAdminProps {
-  image: IFeedBack; // Đảm bảo rằng image được truyền vào là không undefined
-  onDelete: () => void; // Callback để xóa
-  onEdit: () => void;   // Callback để sửa
+  image: IFeedBack; 
+  onDelete: () => void; 
+  onEdit: () => void;   
 }
 
 export default function CardAdmin({ image, onDelete, onEdit }: CardAdminProps) {
   if (!image) {
-    return null; // Hoặc có thể hiển thị một thông báo nào đó
+    return null; 
   }
 
   return (
     <div className="card-container">
       <img alt={image?.nameFeedback} src={image?.url} className="card-image" />
       <div className="card-content">
-        <h5 className="card-title">{image?.nameFeedback}</h5>
+        <h6 className="card-title">{image?.nameFeedback}</h6>
         <p className="card-description">{image?.description}</p>
         {image?.subCategory && image.subCategory.name && (
           <p className="card-subcategory">Danh mục con: {image.subCategory.name}</p>
